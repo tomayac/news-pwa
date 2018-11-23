@@ -26,7 +26,7 @@ const getFrontPageNews = async (url) => {
   }
 };
 
-router.get('/:newsProvider', async (req, res) => {
+router.get('/(:newsProvider)?', async (req, res) => {
   try {
     const newsProvider = NEWS_PROVIDERS[req.params.newsProvider];
     if (typeof newsProvider === 'undefined') {
