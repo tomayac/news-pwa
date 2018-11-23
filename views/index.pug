@@ -1,0 +1,12 @@
+extends layout
+block content
+  each article in articles
+    article
+      header
+        h1= article.headline
+        h2= article.alternativeHeadline
+        time(datetime=article.datePublished)= new Date(article.datePublished).toLocaleString()
+      section
+        p= article.description
+        p
+          img(src=article.image[0].url)

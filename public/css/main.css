@@ -1,0 +1,37 @@
+:root {
+  --main-bg-color: white;
+  --main-headline-color: black;
+  --secondary-headline-color: darkgray;
+}
+
+html {
+  box-sizing: border-box;
+  display: flux;
+  justify-content: center;
+  background-color: var(--main-bg-color);
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: inherit;
+}
+
+body {
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen, Ubuntu, Cantarell, Droid Sans, Helvetica Neue;
+  font-size: 14pt;
+  height: 100vh;
+  width: 100%;
+  max-width: 100em;
+}
+
+h1 {
+  color: var(--main-headline-color);
+  font-size: 2em;
+  text-decoration: underline;
+}
+
+h2 {
+  color: var(--secondary-headline-color);
+  font-size: 1.5em;
+}

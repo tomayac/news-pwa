@@ -1,0 +1,47 @@
+{
+  "name": "news-pwa",
+  "version": "1.0.0",
+  "description": "News Progressive Web App",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js",
+    "lint": "eslint ./ --fix --fix && stylelint public/css/**.css"
+  },
+  "keywords": [
+    "news",
+    "pwa"
+  ],
+  "author": "Thomas Steiner <steiner.thomas@gmail.com> (http://blog.tomayac.com/)",
+  "license": "Apache-2.0",
+  "dependencies": {
+    "express": "^4.16.4",
+    "helmet": "^3.15.0",
+    "jsonpath": "^1.0.0",
+    "pug": "^2.0.3",
+    "request": "^2.88.0",
+    "request-promise-native": "^1.0.5"
+  },
+  "devDependencies": {
+    "eslint": "^5.9.0",
+    "eslint-config-google": "^0.11.0",
+    "stylelint": "^9.8.0",
+    "stylelint-config-standard": "^18.2.0"
+  },
+  "eslintConfig": {
+    "parserOptions": {
+      "ecmaVersion": 8
+    },
+    "extends": [
+      "google"
+    ],
+    "env": {
+      "es6": true,
+      "browser": true,
+      "serviceworker": true,
+      "node": true
+    }
+  },
+  "stylelint": {
+    "extends": "stylelint-config-standard"
+  }
+}
