@@ -9,7 +9,7 @@ block content
         |
         | •
         |
-        time(datetime=article.datePublished)= new Date(article.datePublished).toLocaleString(`${locale}`, {weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'})
+        time(datetime=article.datePublished)= new Intl.DateTimeFormat(`${locale}`, {weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit', second: '2-digit'}).format(new Date(article.datePublished))
       section
         p!= article.description
         figure

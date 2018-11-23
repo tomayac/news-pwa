@@ -4,7 +4,7 @@
   "description": "News Progressive Web App",
   "main": "app.js",
   "scripts": {
-    "start": "node --icu-data-dir=node_modules/full-icu app.js",
+    "start": "node app.js",
     "lint": "npx eslint ./ --fix && npx stylelint ./public/css/**.css"
   },
   "keywords": [
@@ -17,6 +17,7 @@
     "express": "^4.16.4",
     "full-icu": "^1.2.1",
     "helmet": "^3.15.0",
+    "intl": "^1.2.5",
     "jsonpath": "^1.0.0",
     "pug": "^2.0.3",
     "request": "^2.88.0",

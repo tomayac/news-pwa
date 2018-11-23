@@ -2,6 +2,10 @@ const express = require('express');
 const router = new express.Router();
 const request = require('request-promise-native');
 const jsonPath = require('jsonpath');
+let Intl;
+if (require('full-icu').icu_small) {
+  Intl = require('intl');
+}
 
 const NEWS_PROVIDERS = {
   tagesschau: require('../schema_org-mappings/tagesschau'),
@@ -45,6 +49,7 @@ router.get('/:newsProvider', async (req, res) => {
     res.render('index', {
       articles: parsed,
       locale: newsProvider.locale,
+      Intl: Intl
     });
   } catch (e) {
     return res.render('error', {providers: Object.keys(NEWS_PROVIDERS)});

@@ -1,0 +1,9 @@
+extends layout
+block content
+  h1 🙀 Ooops
+  h2 Looks like you tried an unsupported news provider
+  p Try any of the following news providers instead:
+  ul
+    each provider in providers
+      li
+        a(href=`./${provider}`)= `📰 ${provider}`
