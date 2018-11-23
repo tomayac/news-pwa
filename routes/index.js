@@ -39,7 +39,10 @@ router.get('/:newsProvider', async (req, res) => {
         parsed[i][key] = item;
       });
     });
-    res.render('index', {articles: parsed});
+    res.render('index', {
+      articles: parsed,
+      locale: newsProvider.locale,
+    });
   } catch (e) {
     res.status(400);
     res.send(`Fuck, got an error: ${e}`);

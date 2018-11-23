@@ -13,6 +13,8 @@ module.exports = {
     'name': 'tagesschau.de',
   },
 
+  locale: 'de-DE',
+
   article: {
 
     '@id': {

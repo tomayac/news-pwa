@@ -5,8 +5,13 @@ block content
       header
         h1= article.headline
         h2= article.alternativeHeadline
-        time(datetime=article.datePublished)= new Date(article.datePublished).toLocaleString()
+        span= article.dateline
+        |
+        | •
+        |
+        time(datetime=article.datePublished)= new Date(article.datePublished).toLocaleString(`${locale}`, {weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'})
       section
-        p= article.description
-        p
-          img(src=article.image[0].url)
+        p!= article.description
+        figure
+          img(src=article.image[0].url, width=article.image[0].width, height=article.image[0].height, alt=article.image[0].caption)
+          figcaption= article.image[0].caption
