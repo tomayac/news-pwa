@@ -18,13 +18,16 @@ const getFrontPageNews = async (url) => {
     };
     return await request.get(options);
   } catch (e) {
-    return new Error(`Invalid news provider "${url}".`);
+    return new Error('Invalid news provider.');
   }
 };
 
 router.get('/:newsProvider', async (req, res) => {
   try {
     const newsProvider = NEWS_PROVIDERS[req.params.newsProvider];
+    if (typeof newsProvider === 'undefined') {
+      return res.render('error', {providers: Object.keys(NEWS_PROVIDERS)});
+    }
     const raw = await getFrontPageNews(newsProvider.endpoint);
     const parsed = [];
     Object.keys(newsProvider.article).forEach((key) => {
@@ -44,8 +47,7 @@ router.get('/:newsProvider', async (req, res) => {
       locale: newsProvider.locale,
     });
   } catch (e) {
-    res.status(400);
-    res.send(`Fuck, got an error: ${e}`);
+    return res.render('error', {providers: Object.keys(NEWS_PROVIDERS)});
   }
 });
 
