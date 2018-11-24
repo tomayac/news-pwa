@@ -19,24 +19,28 @@ html {
 
 body {
   font-family: system-ui, -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen, Ubuntu, Cantarell, Droid Sans, Helvetica Neue;
-  font-size: 13pt;
+  font-size: 12pt;
   height: 100vh;
   width: 100%;
+  min-width: 240px;
   max-width: 50em;
+}
+
+body > header {
+  background-color: var(--main-headline-color);
 }
 
 h1 {
   color: var(--main-headline-color);
-  font-size: 2em;
-  text-decoration: underline;
+  font-size: 1.5em;
 }
 
 h2 {
   color: var(--secondary-headline-color);
-  font-size: 1.5em;
+  font-size: 1.25em;
 }
 
-figure > img {
+figure img {
   max-width: 100%;
   height: auto;
 }

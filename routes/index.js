@@ -33,25 +33,29 @@ router.get('/(:newsProvider)?', async (req, res) => {
       return res.render('error', {providers: Object.keys(NEWS_PROVIDERS)});
     }
     const raw = await getFrontPageNews(newsProvider.endpoint);
-    const parsed = [];
+    let parsed = [];
     Object.keys(newsProvider.article).forEach((key) => {
       let temp = jsonPath.nodes(raw, newsProvider.article[key].path);
       temp = newsProvider.article[key].postprocess(temp);
-      temp.forEach((item, i) => {
+      for (let i = 0, lenI = temp.length; i < lenI; i++) {
+        const item = temp[i];
         parsed[i] = parsed[i] || {
           '@context': 'http://schema.org',
           '@type': 'NewsArticle',
-          'publisher': newsProvider.publisher,
         };
         parsed[i][key] = item;
-      });
+        parsed[i].publisher = newsProvider.publisher;
+      }
     });
-    res.render('index', {
+    parsed = parsed.filter((item) => item.articleBody);
+    return res.render('index', {
       articles: parsed,
       locale: newsProvider.locale,
-      Intl: Intl
+      publisher: newsProvider.publisher,
+      Intl: Intl,
     });
   } catch (e) {
+    console.error(e);
     return res.render('error', {providers: Object.keys(NEWS_PROVIDERS)});
   }
 });

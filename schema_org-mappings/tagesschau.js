@@ -19,45 +19,57 @@ module.exports = {
 
     '@id': {
       path: '$.news[*].shareURL',
-      postprocess: (content) => content.map((item) => item.value),
+      postprocess: (content) => {
+        const result = [];
+        content.forEach((item) => {
+          result[item.path[2]] = item.value;
+        });
+        return result;
+      },
     },
 
     'headline': {
       path: '$.news[*].title',
-      postprocess: (content) => content.map((item) => item.value),
+      postprocess: (content) => {
+        const result = [];
+        content.forEach((item) => {
+          result[item.path[2]] = item.value;
+        });
+        return result;
+      },
     },
 
     'alternativeHeadline': {
       path: '$.news[*].topline',
-      postprocess: (content) => content.map((item) => item.value),
+      postprocess: (content) => {
+        const result = [];
+        content.forEach((item) => {
+          result[item.path[2]] = item.value;
+        });
+        return result;
+      },
     },
 
     'description': {
-      path: '$.news[*].content[0].value',
-      postprocess: (content) => content.map((item) => {
-        return item.value
-            .replace(/<strong>/g, '')
-            .replace(/<\/strong>/g, '');
-      }),
+      path: '$.news[*].firstSentence',
+      postprocess: (content) => {
+        const result = [];
+        content.forEach((item) => {
+          result[item.path[2]] = item.value;
+        });
+        return result;
+      },
     },
 
     'articleBody': {
-      path: '$.news[*].content[*]',
+      path: '$.news[*].content[?(@.type=="text" || @.type=="headline")]',
       postprocess: (content) => {
         const result = [];
-        let buffer = [];
-        let i = 0;
         content.forEach((item) => {
-          if (item.path[2] !== i) {
-            result.push(buffer.join(''));
-            buffer = [];
-            i++;
-          }
-          if (item.value.type === 'text') {
-            buffer.push(`<p>${item.value.value}</p>`);
-          } else {
-            buffer.push(item.value.value);
-          }
+          const value = item.value.type === 'text' ?
+              `<p>${item.value.value}</p>` : item.value.value;
+          result[item.path[2]] = result[item.path[2]] ?
+               result[item.path[2]] += value : value;
         });
         return result;
       },
@@ -65,41 +77,57 @@ module.exports = {
 
     'articleSection': {
       path: '$.news[*].ressort',
-      postprocess: (content) => content.map((item) => item.value),
+      postprocess: (content) => {
+        const result = [];
+        content.forEach((item) => {
+          result[item.path[2]] = item.value;
+        });
+        return result;
+      },
     },
 
     'dateline': {
       path: '$.news[*].geotags',
-      postprocess: (content) => content.map((item) => {
-        return item.value.map((tag) => tag.tag).join(', ');
-      }),
+      postprocess: (content) => {
+        const result = [];
+        content.forEach((item) => {
+          result[item.path[2]] = item.value.map((tag) => tag.tag).join(', ');
+        });
+        return result;
+      },
     },
 
     'datePublished': {
       path: '$.news[*].date',
-      postprocess: (content) => content.map((item) => item.value),
+      postprocess: (content) => {
+        const result = [];
+        content.forEach((item) => {
+          result[item.path[2]] = item.value;
+        });
+        return result;
+      },
     },
 
     'mainEntityOfPage': {
       path: '$.news[*].shareURL',
-      postprocess: (content) => content.map((item) => item.value),
+      postprocess: (content) => {
+        const result = [];
+        content.forEach((item) => {
+          result[item.path[2]] = item.value;
+        });
+        return result;
+      },
     },
 
     'author': {
       // eslint-disable-next-line max-len
       path: '$.news[*].content[*][?(@.title=="Korrespondentin" || @.title=="Korrespondent")].text',
       postprocess: (content) => {
-        let max = 0;
-        content.forEach((item) => {
-          if (item.path[2] > max) {
-            max = item.path[2];
-          }
-        });
-        const result = new Array(max);
+        const result = [];
         content.forEach((item) => {
           result[item.path[2]] = {
             '@type': 'Person',
-            'name': item.value.replace(/,\s*$/g, ''),
+            'name': item.value.split(',')[0],
           };
         });
         return result;
@@ -109,46 +137,54 @@ module.exports = {
     'image': {
       path: '$.news[*].teaserImage',
       postprocess: (content) => {
-        return content.map((item) => {
-          item = item.value;
-          return [{
+        const result = [];
+        content.forEach((item) => {
+          const value = item.value;
+          result[item.path[2]] = [{
             '@type': 'ImageObject',
-            'caption': item.alttext,
-            'url': item.videowebl.imageurl,
+            'caption': value.alttext,
+            'url': value.videowebl.imageurl,
             'width': 960,
             'height': 540,
           }, {
             '@type': 'ImageObject',
-            'caption': item.alttext,
-            'url': item.videowebm.imageurl,
+            'caption': value.alttext,
+            'url': value.videowebm.imageurl,
             'width': 512,
             'height': 288,
           }, {
             '@type': 'ImageObject',
-            'caption': item.alttext,
-            'url': item.videowebs.imageurl,
+            'caption': value.alttext,
+            'url': value.videowebs.imageurl,
             'width': 256,
             'height': 144,
           }, {
             '@type': 'ImageObject',
-            'caption': item.alttext,
-            'url': item.portraetgrossplus8x9.imageurl,
+            'caption': value.alttext,
+            'url': value.portraetgrossplus8x9.imageurl,
             'width': 512,
             'height': 576,
           }, {
             '@type': 'ImageObject',
-            'caption': item.alttext,
-            'url': item.portraetgross8x9.imageurl,
+            'caption': value.alttext,
+            'url': value.portraetgross8x9.imageurl,
             'width': 256,
             'height': 288,
           }];
         });
+        return result;
       },
     },
 
     'thumbnailUrl': {
       path: '$.news[*].images[*].videowebs.imageurl',
-      postprocess: (content) => content.map((item) => item.value),
+      postprocess: (content) => {
+        const result = [];
+        content.forEach((item) => {
+          result[item.path[2]] = item.value;
+        });
+        return result;
+      },
     },
 
   },

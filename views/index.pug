@@ -5,13 +5,21 @@ block content
       header
         h1= article.headline
         h2= article.alternativeHeadline
-        span= article.dateline
-        |
-        | •
-        |
-        time(datetime=article.datePublished)= new Intl.DateTimeFormat(`${locale}`, {weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit', second: '2-digit'}).format(new Date(article.datePublished))
+        if article.dateline
+          span= `🗺 ${article.dateline}`
+          |
+          |
+        time(datetime=article.datePublished)= `🗓 ${new Intl.DateTimeFormat(`${locale}`, {weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit', second: '2-digit'}).format(new Date(article.datePublished))}`
       section
-        p!= article.description
+        if article.author
+          p= `👤 ${article.author.name}`
         figure
-          img(src=article.image[0].url, width=article.image[0].width, height=article.image[0].height, alt=article.image[0].caption)
+          picture
+            each image in article.image.sort((a, b) => b.width - a.width)
+              source(srcset=image.url, media=`(min-width: ${image.width}px)`)
+            - const smallestImage = article.image.sort((a, b) => a.width - b.width)[0]
+            img(src=smallestImage.url, alt=smallestImage.caption)
           figcaption= article.image[0].caption
+        details
+          summary!= article.description
+          section!= article.articleBody
