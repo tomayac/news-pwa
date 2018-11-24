@@ -15,10 +15,11 @@ block content
           p= `👤 ${article.author.name}`
         figure
           picture
+            - const placeholder = 'data:image/svg+xml;utf8,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCI+PHBhdGggZD0iTTIwIDE4bC00LTQtMiAyLTQtNC0yIDEtNCA1aDE2em0yLTEzdjE1SDJWNWgyMHoiLz48L3N2Zz4='
             each image in article.image.sort((a, b) => b.width - a.width)
-              source(srcset=image.url, media=`(min-width: ${image.width}px)`)
+              source(srcset=placeholder, data-srcset=image.url, media=`(min-width: ${image.width}px)`, lazyload)
             - const smallestImage = article.image.sort((a, b) => a.width - b.width)[0]
-            img(src=smallestImage.url, alt=smallestImage.caption)
+            img(src=placeholder, data-src=smallestImage.url, alt=smallestImage.caption, decoding='async', lazyload)
           figcaption= article.image[0].caption
         details
           summary!= article.description

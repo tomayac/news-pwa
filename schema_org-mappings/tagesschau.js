@@ -108,6 +108,17 @@ module.exports = {
       },
     },
 
+    'dateModified': {
+      path: '$.news[*].date',
+      postprocess: (content) => {
+        const result = [];
+        content.forEach((item) => {
+          result[item.path[2]] = item.value;
+        });
+        return result;
+      },
+    },
+
     'mainEntityOfPage': {
       path: '$.news[*].shareURL',
       postprocess: (content) => {
