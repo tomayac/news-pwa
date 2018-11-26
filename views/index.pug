@@ -6,20 +6,20 @@ block content
         h1= article.headline
         h2= article.alternativeHeadline
         if article.dateline
-          span= `🗺 ${article.dateline}`
-          |
-          |
-        time(datetime=article.datePublished)= `🗓 ${new Intl.DateTimeFormat(`${locale}`, {weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit', second: '2-digit'}).format(new Date(article.datePublished))}`
-      section
+          img.icon(src='./img/earth.svg', alt='')
+          span.metadata= `${article.dateline}`
+        img.icon(src='./img/calendar.svg', alt='')
+        time.metadata(datetime=article.datePublished)= `${new Intl.DateTimeFormat(`${locale}`, {year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit', second: '2-digit'}).format(new Date(article.datePublished))}`
         if article.author
-          p= `👤 ${article.author.name}`
-        figure
+          img.icon(src='./img/author.svg', alt='')
+          span.metadata= `${article.author.name}`
+      section
+        figure(lazyload)
           picture
-            - const placeholder = 'data:image/svg+xml;utf8,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCI+PHBhdGggZD0iTTIwIDE4bC00LTQtMiAyLTQtNC0yIDEtNCA1aDE2em0yLTEzdjE1SDJWNWgyMHoiLz48L3N2Zz4='
             each image in article.image.sort((a, b) => b.width - a.width)
-              source(srcset=placeholder, data-srcset=image.url, media=`(min-width: ${image.width}px)`, lazyload)
+              source(srcset='./img/placeholder.svg', data-srcset=image.url, media=`(min-width: ${image.width}px)`)
             - const smallestImage = article.image.sort((a, b) => a.width - b.width)[0]
-            img(src=placeholder, data-src=smallestImage.url, alt=smallestImage.caption, decoding='async', lazyload)
+            img(src='./img/placeholder.svg', data-src=smallestImage.url, alt=smallestImage.caption, decoding='async')
           figcaption= article.image[0].caption
         details
           summary!= article.description
