@@ -89,8 +89,10 @@ h3 {
 }
 
 a {
-  color: var(--link-color);
-  text-decoration: none;
+  color: var(--main-color);
+  text-decoration: underline;
+  text-decoration-skip-ink: auto;
+  text-decoration-color: var(--link-color);
 }
 
 .icon {
@@ -138,6 +140,7 @@ details[open] > summary {
 
 details[open] > summary::after {
   content: '';
+  outline: none;
 }
 
 figure {
