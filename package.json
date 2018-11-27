@@ -14,6 +14,8 @@
   "author": "Thomas Steiner <steiner.thomas@gmail.com> (http://blog.tomayac.com/)",
   "license": "Apache-2.0",
   "dependencies": {
+    "compression": "^1.7.3",
+    "cors": "^2.8.5",
     "express": "^4.16.4",
     "full-icu": "^1.2.1",
     "helmet": "^3.15.0",
@@ -21,7 +23,8 @@
     "jsonpath": "^1.0.0",
     "pug": "^2.0.3",
     "request": "^2.88.0",
-    "request-promise-native": "^1.0.5"
+    "request-promise-native": "^1.0.5",
+    "spdy": "^4.0.0"
   },
   "devDependencies": {
     "eslint": "^5.9.0",
