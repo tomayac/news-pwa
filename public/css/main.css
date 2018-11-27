@@ -116,6 +116,7 @@ a {
 summary {
   cursor: pointer;
   outline: none;
+  position: relative;
 }
 
 summary::after {
