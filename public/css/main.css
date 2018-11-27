@@ -19,6 +19,7 @@
 @font-face {
   font-family: 'Amstelvar-Roman-VF';
   src: url('../fonts/Amstelvar-Roman-VF.ttf');
+  font-display: swap;
 }
 
 html {
