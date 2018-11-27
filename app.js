@@ -27,10 +27,8 @@ const server = spdy.createServer(http.Server, {
   protocols: ['h2'],
   protocol: 'h2',
   ssl: false,
-  plain: true
+  plain: true,
 }, app);
-
-console.log(server)
 
 const listener = server.listen(PORT, () => {
   console.log('Your app is listening on port ' + listener.address().port);

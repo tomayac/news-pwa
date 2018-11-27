@@ -70,6 +70,7 @@ router.get('/(:newsProvider)?', async (req, res) => {
       articles: parsed,
       locale: newsProvider.locale,
       publisher: newsProvider.publisher,
+      home: req.params.newsProvider,
       Intl: Intl,
     });
   } catch (error) {

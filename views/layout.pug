@@ -3,9 +3,10 @@ html
   include includes/head.pug
   body
     if publisher
-      header
-        h1
-          img(src=publisher.logo.url, width=publisher.logo.width, height=publisher.logo.height, alt=publisher.name, decoding='async')
+        header
+          a(href=`./${home}`)
+            h1
+              img(src=publisher.logo.url, width=publisher.logo.width, height=publisher.logo.height, alt=publisher.name, decoding='async')
     main
       block content
     block footer

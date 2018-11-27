@@ -5,14 +5,18 @@ block content
       header
         h1= article.headline
         h2= article.alternativeHeadline
-        if article.dateline
-          img.icon(src='./img/earth.svg', alt='')
-          span.metadata= `${article.dateline}`
-        img.icon(src='./img/calendar.svg', alt='')
-        time.metadata(datetime=article.datePublished)= `${new Intl.DateTimeFormat(`${locale}`, {year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit', second: '2-digit'}).format(new Date(article.datePublished))}`
-        if article.author
-          img.icon(src='./img/author.svg', alt='')
-          span.metadata= `${article.author.name}`
+        .metadata
+          if article.dateline
+            span
+              img.icon(src='./img/earth.svg', alt='')
+              | #{article.dateline}
+          span
+            img.icon(src='./img/calendar.svg', alt='')
+            time(datetime=article.datePublished)= `${new Intl.DateTimeFormat(`${locale}`, {year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit', second: '2-digit'}).format(new Date(article.datePublished))}`
+          if article.author
+            span
+              img.icon(src='./img/author.svg', alt='')
+              | #{article.author.name}
       section
         figure(lazyload)
           picture

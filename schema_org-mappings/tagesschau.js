@@ -51,11 +51,15 @@ module.exports = {
     },
 
     'description': {
-      path: '$.news[*].firstSentence',
+      path: '$.news[*].content[0]',
       postprocess: (content) => {
         const result = [];
         content.forEach((item) => {
-          result[item.path[2]] = item.value;
+          let value = item.value.type === 'text' ?
+              `<p>${item.value.value}</p>` : item.value.value;
+          // Remove `<strong>`
+          value = value.replace(/<\/?strong>/g, '');
+          result[item.path[2]] = value;
         });
         return result;
       },
@@ -66,8 +70,12 @@ module.exports = {
       postprocess: (content) => {
         const result = [];
         content.forEach((item) => {
-          const value = item.value.type === 'text' ?
+          let value = item.value.type === 'text' ?
               `<p>${item.value.value}</p>` : item.value.value;
+          // Remove `<strong>`
+          value = value.replace(/<\/?strong>/g, '');
+          // Rewrite `<h2>` to `<h3>`
+          value = value.replace(/<(\/?)h2>/g, '<$1h3>');
           result[item.path[2]] = result[item.path[2]] ?
                result[item.path[2]] += value : value;
         });
