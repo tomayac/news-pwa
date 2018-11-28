@@ -2,8 +2,8 @@ const fixTypography = (value) => {
   return value
       // Curly quotes
       .replace(/"(.*?)"/gm, '“$1”')
-      // Proper em-dashes with non-breaking thin space
-      .replace(/\s-\s/gm, ' — ');
+      // Proper em-dashes with breaking thin space
+      .replace(/\s-\s/gm, ' — ');
 };
 
 module.exports = {
