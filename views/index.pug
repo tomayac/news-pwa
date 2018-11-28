@@ -21,9 +21,10 @@ block content
         figure(lazyload)
           picture
             each image in article.image.sort((a, b) => b.width - a.width)
-              source(srcset='./img/placeholder.svg', data-srcset=image.url, media=`(min-width: ${image.width}px)`)
+              - const aspectRatio = image.width / image.height;
+              source(srcset='./img/placeholder.svg', data-srcset=image.url, data-aspect-ratio=aspectRatio, media=`(min-width: ${image.width}px)`)
             - const smallestImage = article.image.sort((a, b) => a.width - b.width)[0]
-            img(src='./img/placeholder.svg', data-src=smallestImage.url, alt=smallestImage.caption, decoding='async')
+            img(src='./img/placeholder.svg', data-src=smallestImage.url, style=`height:calc(100%/(${smallestImage.width/smallestImage.height}))`, alt=smallestImage.caption, decoding='async')
           figcaption= article.image[0].caption
         details
           summary!= article.description

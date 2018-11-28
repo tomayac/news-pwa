@@ -1,3 +1,11 @@
+const fixTypography = (value) => {
+  return value
+      // Curly quotes
+      .replace(/"(.*?)"/gm, '“$1”')
+      // Proper em-dashes with non-breaking thin space
+      .replace(/\s-\s/gm, ' — ');
+};
+
 module.exports = {
   endpoint: 'https://www.tagesschau.de/api2/',
 
@@ -33,7 +41,7 @@ module.exports = {
       postprocess: (content) => {
         const result = [];
         content.forEach((item) => {
-          result[item.path[2]] = item.value;
+          result[item.path[2]] = fixTypography(item.value);
         });
         return result;
       },
@@ -44,7 +52,7 @@ module.exports = {
       postprocess: (content) => {
         const result = [];
         content.forEach((item) => {
-          result[item.path[2]] = item.value;
+          result[item.path[2]] = fixTypography(item.value);
         });
         return result;
       },
@@ -59,7 +67,7 @@ module.exports = {
               `<p>${item.value.value}</p>` : item.value.value;
           // Remove `<strong>`
           value = value.replace(/<\/?strong>/g, '');
-          result[item.path[2]] = value;
+          result[item.path[2]] = fixTypography(value);
         });
         return result;
       },
@@ -76,6 +84,8 @@ module.exports = {
           value = value.replace(/<\/?strong>/g, '');
           // Rewrite `<h2>` to `<h3>`
           value = value.replace(/<(\/?)h2>/g, '<$1h3>');
+          // Fix typography
+          value = fixTypography(value);
           result[item.path[2]] = result[item.path[2]] ?
                result[item.path[2]] += value : value;
         });
@@ -88,7 +98,8 @@ module.exports = {
       postprocess: (content) => {
         const result = [];
         content.forEach((item) => {
-          result[item.path[2]] = item.value;
+          result[item.path[2]] =
+              `${item.value[0].toUpperCase()}${item.value.slice(1)}`;
         });
         return result;
       },
