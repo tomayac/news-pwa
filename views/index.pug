@@ -11,6 +11,9 @@ block content
               img.icon(src='./img/earth.svg', alt='')
               | #{article.dateline}
           span
+            img.icon(src='./img/section.svg', alt='')
+            | #{article.articleSection}
+          span
             img.icon(src='./img/calendar.svg', alt='')
             time(datetime=article.datePublished)= `${new Intl.DateTimeFormat(`${locale}`, {year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit'}).format(new Date(article.datePublished))}`
           if article.author
@@ -24,7 +27,7 @@ block content
               - const aspectRatio = image.width / image.height;
               source(srcset='./img/placeholder.svg', data-srcset=image.url, data-aspect-ratio=aspectRatio, media=`(min-width: ${image.width}px)`)
             - const smallestImage = article.image.sort((a, b) => a.width - b.width)[0]
-            img(src='./img/placeholder.svg', data-src=smallestImage.url, style=`height:calc(100vw/(${smallestImage.width/smallestImage.height}))`, alt=smallestImage.caption, decoding='async')
+            img(src='./img/placeholder.svg', data-src=smallestImage.url, style=`height:calc(var(--main-current-width)/(${smallestImage.width/smallestImage.height}))`, alt=smallestImage.caption, decoding='async')
           figcaption= article.image[0].caption
         details
           summary!= article.description

@@ -14,6 +14,7 @@
   --body-font-size: 12pt;
   --body-min-width: 240px;
   --body-max-width: 1000px;
+  --main-current-width;
 }
 
 @font-face {
@@ -70,7 +71,7 @@ h1 {
   cursor: pointer;
   width: 100%;
   border-bottom: solid 0.2rem var(--main-headline-color);
-  font-size: 2rem;
+  font-size: 1.5rem;
   margin: 0.5rem 0;
 }
 
@@ -81,7 +82,7 @@ h2 {
   cursor: pointer;
   width: 100%;
   border-bottom: solid 0.1rem var(--secondary-headline-color);
-  font-size: 1.5rem;
+  font-size: 1.25rem;
   margin: 0.5rem 0;
 }
 
@@ -91,7 +92,7 @@ h3 {
   color: var(--tertiary-headline-color);
   width: 100%;
   border-bottom: solid 0.1rem var(--tertiary-headline-color);
-  font-size: 1.25rem;
+  font-size: 1rem;
   margin: 0.5rem 0;
 }
 
