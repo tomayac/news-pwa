@@ -1,5 +1,5 @@
 :root {
-  --overscroll-bg-color: black;
+  --overscroll-bg-color: white;
   --main-bg-color: white;
   --main-color: #263238;
   --main-headline-color: black;
@@ -14,7 +14,7 @@
   --body-font-size: 12pt;
   --body-min-width: 240px;
   --body-max-width: 1000px;
-  --main-current-width;
+  --main-current-width: var(--body-max-width);
 }
 
 @font-face {

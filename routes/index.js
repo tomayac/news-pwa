@@ -17,7 +17,7 @@ const getFrontPageNews = async (url) => {
       url: url,
       json: true,
       headers: {
-        'User-Agent': 'News PWA Demo (thomas.steiner@upc.edu)',
+        'User-Agent': 'News PWA Demo (https://github.com/tomayac/news-pwa)',
       },
     };
     let data = await request.get(options);

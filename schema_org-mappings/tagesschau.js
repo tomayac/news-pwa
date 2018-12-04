@@ -6,6 +6,44 @@ const fixTypography = (value) => {
       .replace(/\s-\s/gm, ' — ');
 };
 
+const extractImages = (value) => {
+  let result = [{
+    '@type': 'ImageObject',
+    'caption': value.alttext,
+    'url': value.videowebl.imageurl,
+    'width': 960,
+    'height': 540,
+  }, {
+    '@type': 'ImageObject',
+    'caption': value.alttext,
+    'url': value.videowebm.imageurl,
+    'width': 512,
+    'height': 288,
+  }, {
+    '@type': 'ImageObject',
+    'caption': value.alttext,
+    'url': value.videowebs.imageurl,
+    'width': 256,
+    'height': 144,
+  }];
+  if (value.portraetgrossplus8x9 && value.portraetgross8x9) {
+    result = result.concat([{
+      '@type': 'ImageObject',
+      'caption': value.alttext,
+      'url': value.portraetgrossplus8x9.imageurl,
+      'width': 512,
+      'height': 576,
+    }, {
+      '@type': 'ImageObject',
+      'caption': value.alttext,
+      'url': value.portraetgross8x9.imageurl,
+      'width': 256,
+      'height': 288,
+    }]);
+  }
+  return result;
+};
+
 module.exports = {
   endpoint: 'https://www.tagesschau.de/api2/',
 
@@ -63,10 +101,15 @@ module.exports = {
       postprocess: (content) => {
         const result = [];
         content.forEach((item) => {
-          let value = item.value.type === 'text' ?
-              `<p>${item.value.value}</p>` : item.value.value;
+          if ((!item.value.value) ||
+              (item.value.type !== 'text' && item.value.type !== 'headline')) {
+            return;
+          }
+          let value = `<p>${item.value.value}</p>`;
           // Remove `<strong>`
           value = value.replace(/<\/?strong>/g, '');
+          // Remove `<h2>`
+          value = value.replace(/<\/?h2>/g, '');
           result[item.path[2]] = fixTypography(value);
         });
         return result;
@@ -78,8 +121,12 @@ module.exports = {
       postprocess: (content) => {
         const result = [];
         content.forEach((item) => {
-          let value = item.value.type === 'text' ?
-              `<p>${item.value.value}</p>` : item.value.value;
+          let value;
+          if (item.value.type === 'text') {
+            value = `<p>${item.value.value}</p>`;
+          } else if (item.value.type === 'headline') {
+            value = item.value.value;
+          }
           // Remove `<strong>`
           value = value.replace(/<\/?strong>/g, '');
           // Rewrite `<h2>` to `<h3>`
@@ -87,7 +134,22 @@ module.exports = {
           // Fix typography
           value = fixTypography(value);
           result[item.path[2]] = result[item.path[2]] ?
-               result[item.path[2]] += value : value;
+              result[item.path[2]] += value : value;
+        });
+        return result;
+      },
+    },
+
+    'associatedMedia': {
+      path: '$.news[*].content[?(@.type=="image_gallery")]',
+      postprocess: (content) => {
+        const result = [];
+        content.forEach((item) => {
+          const value = item.value.gallery.map((imgObj) => {
+            return extractImages(imgObj);
+          });
+          result[item.path[2]] = result[item.path[2]] ?
+              result[item.path[2]].concat(value) : value;
         });
         return result;
       },
@@ -170,37 +232,7 @@ module.exports = {
         const result = [];
         content.forEach((item) => {
           const value = item.value;
-          result[item.path[2]] = [{
-            '@type': 'ImageObject',
-            'caption': value.alttext,
-            'url': value.videowebl.imageurl,
-            'width': 960,
-            'height': 540,
-          }, {
-            '@type': 'ImageObject',
-            'caption': value.alttext,
-            'url': value.videowebm.imageurl,
-            'width': 512,
-            'height': 288,
-          }, {
-            '@type': 'ImageObject',
-            'caption': value.alttext,
-            'url': value.videowebs.imageurl,
-            'width': 256,
-            'height': 144,
-          }, {
-            '@type': 'ImageObject',
-            'caption': value.alttext,
-            'url': value.portraetgrossplus8x9.imageurl,
-            'width': 512,
-            'height': 576,
-          }, {
-            '@type': 'ImageObject',
-            'caption': value.alttext,
-            'url': value.portraetgross8x9.imageurl,
-            'width': 256,
-            'height': 288,
-          }];
+          result[item.path[2]] = extractImages(value);
         });
         return result;
       },
