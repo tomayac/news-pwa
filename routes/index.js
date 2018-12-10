@@ -31,6 +31,35 @@ const getFrontPageNews = async (url) => {
   }
 };
 
+const parseNewsJson = (newsProvider, raw) => {
+  let parsed = [];
+  Object.keys(newsProvider.article).forEach((key) => {
+    let temp = jsonPath.nodes(raw, newsProvider.article[key].path);
+    temp = newsProvider.article[key].postprocess(temp);
+    // `temp` can be holey, so use a `for` loop that doesn't skip holes
+    for (let i = 0, lenI = temp.length; i < lenI; i++) {
+      const item = temp[i];
+      parsed[i] = parsed[i] || {
+        '@context': 'http://schema.org',
+        '@type': 'NewsArticle',
+        'publisher': newsProvider.publisher,
+      };
+      parsed[i][key] = item;
+    }
+  });
+  parsed = parsed.map((item) => {
+    if (item.author === undefined) {
+      // If there is no named `author`, the `author` is the `publisher`
+      item.author = newsProvider.publisher;
+    }
+    return item;
+  }).filter((item) => {
+    // Only consider articles with an `articleBody`
+    return item.articleBody;
+  });
+  return parsed;
+};
+
 router.get('/(:newsProvider)?', async (req, res) => {
   try {
     const newsProvider = NEWS_PROVIDERS[req.params.newsProvider];
@@ -38,31 +67,36 @@ router.get('/(:newsProvider)?', async (req, res) => {
       return res.render('error', {providers: Object.keys(NEWS_PROVIDERS)});
     }
     const raw = await getFrontPageNews(newsProvider.endpoint);
-    let parsed = [];
-    Object.keys(newsProvider.article).forEach((key) => {
-      let temp = jsonPath.nodes(raw, newsProvider.article[key].path);
-      temp = newsProvider.article[key].postprocess(temp);
-      // `temp` can be holey, so use a `for` loop that doesn't skip holes
-      for (let i = 0, lenI = temp.length; i < lenI; i++) {
-        const item = temp[i];
-        parsed[i] = parsed[i] || {
-          '@context': 'http://schema.org',
-          '@type': 'NewsArticle',
-          'publisher': newsProvider.publisher,
-        };
-        parsed[i][key] = item;
-      }
+    const parsed = parseNewsJson(newsProvider, raw);
+    if (req.query.raw !== undefined) {
+      return res.json(parsed);
+    }
+    return res.render('index', {
+      articles: parsed,
+      locale: newsProvider.locale,
+      publisher: newsProvider.publisher,
+      home: req.params.newsProvider,
+      Intl: Intl,
     });
-    parsed = parsed.map((item) => {
-      if (item.author === undefined) {
-        // If there is no named `author`, the `author` is the `publisher`
-        item.author = newsProvider.publisher;
-      }
-      return item;
-    }).filter((item) => {
-      // Only consider articles with an `articleBody`
-      return item.articleBody;
+  } catch (error) {
+    console.error(error);
+    return res.render('error', {
+      providers: Object.keys(NEWS_PROVIDERS),
+      error: error,
     });
+  }
+});
+
+router.get('/:newsProvider/:section/:article', async (req, res) => {
+  try {
+    const newsProvider = NEWS_PROVIDERS[req.params.newsProvider];
+    if (typeof newsProvider === 'undefined') {
+      return res.render('error', {providers: Object.keys(NEWS_PROVIDERS)});
+    }
+    const article = req.params.article;
+    const section = req.params.section;
+    const raw = await getFrontPageNews(`${newsProvider.endpoint}${section}/${article}.json`);
+    const parsed = parseNewsJson(newsProvider, {news: [raw]});
     if (req.query.raw !== undefined) {
       return res.json(parsed);
     }

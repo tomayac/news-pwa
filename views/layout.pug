@@ -4,7 +4,7 @@ html(lang=locale)
   body
     if publisher
         header
-          a(href=`./${home}`)
+          a(href=`/${home}`)
             h1
               img(src=publisher.logo.url, style=`max-width:${publisher.logo.width}px; max-height:${publisher.logo.height}px; height:calc(var(--main-current-width)/(${publisher.logo.width/publisher.logo.height}))`, alt=publisher.name, decoding='async')
     main

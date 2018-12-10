@@ -8,37 +8,35 @@ block content
         .metadata
           if article.dateline
             span
-              img.icon(src='./img/earth.svg', alt='')
+              img.icon(src='/img/earth.svg', alt='')
               | #{article.dateline}
           span
-            img.icon(src='./img/section.svg', alt='')
+            img.icon(src='/img/section.svg', alt='')
             | #{article.articleSection}
           span
-            img.icon(src='./img/calendar.svg', alt='')
+            img.icon(src='/img/calendar.svg', alt='')
             time(datetime=article.datePublished)= `${new Intl.DateTimeFormat(`${locale}`, {year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit'}).format(new Date(article.datePublished))}`
           if article.author
             span
-              img.icon(src='./img/author.svg', alt='')
+              img.icon(src='/img/author.svg', alt='')
               | #{article.author.name}
       section
         figure(lazyload)
           picture
             each image in article.image.sort((a, b) => b.width - a.width)
-              - const aspectRatio = image.width / image.height;
-              source(srcset='./img/placeholder.svg', data-srcset=image.url, media=`(min-width: ${image.width}px)`)
+              source(srcset='/img/placeholder.svg', data-srcset=image.url, media=`(min-width: ${image.width}px)`)
             - const smallestImage = article.image.sort((a, b) => a.width - b.width)[0]
-            img(src='./img/placeholder.svg', data-src=smallestImage.url, style=`height:calc(var(--main-current-width)/(${smallestImage.width/smallestImage.height}))`, alt=smallestImage.caption, decoding='async')
+            img(src='/img/placeholder.svg', data-src=smallestImage.url, style=`height:calc(var(--main-current-width)/(${smallestImage.width/smallestImage.height}))`, alt=smallestImage.caption, decoding='async')
           figcaption= article.image[0].caption
-        details
+        details(open=articles.length === 1 ? true : false)
           summary!= article.description
           section!= article.articleBody
           if article.associatedMedia
             each associatedMedium in article.associatedMedia
-              figure(lazyload)
-                picture
+              figure.associate-media(lazyload)
+                picture.associate-media
                   each image in associatedMedium.sort((a, b) => b.width - a.width)
-                    - const aspectRatio = image.width / image.height;
-                    source(srcset='./img/placeholder.svg', data-srcset=image.url, media=`(min-width: ${image.width}px)`)
+                    source(srcset='/img/placeholder.svg', data-srcset=image.url, media=`(min-width: ${image.width}px)`)
                   - const smallestImage = associatedMedium.sort((a, b) => a.width - b.width)[0]
-                  img(src='./img/placeholder.svg', data-src=smallestImage.url, style=`height:calc(var(--main-current-width)/(${smallestImage.width/smallestImage.height}))`, alt=smallestImage.caption, decoding='async')
-                figcaption= associatedMedium[0].caption
+                  img.associate-media(src='/img/placeholder.svg', data-src=smallestImage.url, style=`height:calc(var(--main-current-width)/(${smallestImage.width/smallestImage.height}))`, alt=smallestImage.caption, decoding='async')
+                figcaption.associate-media= associatedMedium[0].caption

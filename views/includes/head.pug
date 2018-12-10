@@ -2,14 +2,14 @@ head
   meta(charset='utf-8')
   meta(name='viewport', content='width=device-width,minimum-scale=1,initial-scale=1')
   title 📰 News Progressive Web App
-  link(rel='stylesheet', href='./css/main.css')
-  link(rel='preload', href='./fonts/Amstelvar-Roman-VF.woff2', as='font', crossorigin)
-  link(rel='preload', href='./js/lazyload.mjs', as='script', crossorigin)
-  link(rel='preload', href='./js/main.mjs', as='script', crossorigin)
-  link(rel='preload', href='./img/placeholder.svg', as='image')
+  link(rel='stylesheet', href='/css/main.css')
+  link(rel='preload', href='/fonts/Amstelvar-Roman-VF.woff2', as='font', crossorigin)
+  link(rel='preload', href='/js/lazyload.mjs', as='script', crossorigin)
+  link(rel='preload', href='/js/main.mjs', as='script', crossorigin)
+  link(rel='preload', href='/img/placeholder.svg', as='image')
   script.
     if (!('IntersectionObserver' in window)) {
       document.write('<script src="https://unpkg.com/intersection-observer@0.5.0/intersection-observer.js"><\/script>');
     }
-  script(type='module', src='./js/lazyload.mjs', defer)
-  script(type='module', src='./js/main.mjs', defer)
+  script(type='module', src='/js/lazyload.mjs', defer)
+  script(type='module', src='/js/main.mjs', defer)
