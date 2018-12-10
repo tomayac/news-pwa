@@ -14,7 +14,7 @@
         }
       }
     });
-  });
+  }, {rootMargin: '200px',});
   const entries = document.querySelectorAll('[lazyload]');
   for (const entry of entries) {
     observer.observe(entry);

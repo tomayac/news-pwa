@@ -25,7 +25,7 @@ block content
           picture
             each image in article.image.sort((a, b) => b.width - a.width)
               - const aspectRatio = image.width / image.height;
-              source(srcset='./img/placeholder.svg', data-srcset=image.url, data-aspect-ratio=aspectRatio, media=`(min-width: ${image.width}px)`)
+              source(srcset='./img/placeholder.svg', data-srcset=image.url, media=`(min-width: ${image.width}px)`)
             - const smallestImage = article.image.sort((a, b) => a.width - b.width)[0]
             img(src='./img/placeholder.svg', data-src=smallestImage.url, style=`height:calc(var(--main-current-width)/(${smallestImage.width/smallestImage.height}))`, alt=smallestImage.caption, decoding='async')
           figcaption= article.image[0].caption
@@ -38,7 +38,7 @@ block content
                 picture
                   each image in associatedMedium.sort((a, b) => b.width - a.width)
                     - const aspectRatio = image.width / image.height;
-                    source(srcset='./img/placeholder.svg', data-srcset=image.url, data-aspect-ratio=aspectRatio, media=`(min-width: ${image.width}px)`)
+                    source(srcset='./img/placeholder.svg', data-srcset=image.url, media=`(min-width: ${image.width}px)`)
                   - const smallestImage = associatedMedium.sort((a, b) => a.width - b.width)[0]
                   img(src='./img/placeholder.svg', data-src=smallestImage.url, style=`height:calc(var(--main-current-width)/(${smallestImage.width/smallestImage.height}))`, alt=smallestImage.caption, decoding='async')
-                figcaption= article.image[0].caption
+                figcaption= associatedMedium[0].caption
