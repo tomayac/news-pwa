@@ -171,7 +171,6 @@ figure video {
 
 figcaption {
   position: absolute;
-  bottom: 0;
   left: 0;
   right: 0;
   font-size: 0.8rem;
@@ -179,4 +178,12 @@ figcaption {
   text-align: center;
   background-color: var(--figcaption-bg-color);
   color: var(--figcaption-color);
+}
+
+picture + figcaption {
+  bottom: 0;
+}
+
+video + figcaption {
+  top: 0;
 }

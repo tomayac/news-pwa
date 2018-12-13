@@ -42,7 +42,7 @@ block content
                 figcaption.associate-media= associatedMedium[0].caption
           if article.video
             figure
-              video.associate-media(controls)
+              video.associate-media(controls, preload='metadata', playsinline, poster=article.video[0].thumbnailUrl)
                 each source in article.video.sort((a, b) => b.width - a.width)
                   source(src=source.contentUrl, media=`(min-width: ${source.width}px)`)
               figcaption.associate-media= article.video[0].caption
