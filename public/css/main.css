@@ -98,8 +98,8 @@ h3 {
 a {
   color: var(--main-color);
   text-decoration: none;
-  border-bottom: solid var(--link-color) .1rem;
-  margin-bottom: -.05rem;
+  border-bottom: solid var(--link-color) 0.1rem;
+  margin-bottom: -0.05rem;
 }
 
 .icon {
@@ -161,7 +161,8 @@ figure {
   cursor: pointer;
 }
 
-figure img {
+figure img,
+figure video {
   display: block;
   width: 100%;
   height: auto;

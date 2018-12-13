@@ -44,6 +44,41 @@ const extractImages = (value) => {
   return result;
 };
 
+const extractVideos = (value) => {
+  const result = [{
+    '@type': 'VideoObject',
+    'caption': value.title,
+    'contentUrl': value.streams.h264xl,
+    'description': value.teaserImage.title,
+    'name': value.alttext,
+    'thumbnailUrl': value.teaserImage.videowebl.imageurl,
+    'uploadDate': value.date,
+    'width': 1280,
+    'height': 720,
+  }, {
+    '@type': 'VideoObject',
+    'caption': value.title,
+    'contentUrl': value.streams.h264m,
+    'description': value.teaserImage.title,
+    'name': value.alttext,
+    'thumbnailUrl': value.teaserImage.videowebm.imageurl,
+    'uploadDate': value.date,
+    'width': 512,
+    'height': 288,
+  }, {
+    '@type': 'VideoObject',
+    'caption': value.title,
+    'contentUrl': value.streams.h264s,
+    'description': value.teaserImage.title,
+    'name': value.alttext,
+    'thumbnailUrl': value.teaserImage.videowebs.imageurl,
+    'uploadDate': value.date,
+    'width': 256,
+    'height': 144,
+  }];
+  return result;
+};
+
 module.exports = {
   endpoint: 'https://www.tagesschau.de/api2/',
 
@@ -233,6 +268,18 @@ module.exports = {
         content.forEach((item) => {
           const value = item.value;
           result[item.path[2]] = extractImages(value);
+        });
+        return result;
+      },
+    },
+
+    'video': {
+      path: '$.news[1].content[*].video',
+      postprocess: (content) => {
+        const result = [];
+        content.forEach((item) => {
+          const value = item.value;
+          result[item.path[2]] = extractVideos(value);
         });
         return result;
       },

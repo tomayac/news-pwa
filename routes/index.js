@@ -1,7 +1,6 @@
 const express = require('express');
 const router = new express.Router();
-const request = require('request-promise-native');
-const jsonPath = require('jsonpath');
+const news = require('../util/news.js');
 let Intl;
 if (require('full-icu').icu_small) {
   Intl = require('intl');
@@ -11,54 +10,8 @@ const NEWS_PROVIDERS = {
   tagesschau: require('../schema_org-mappings/tagesschau'),
 };
 
-const getFrontPageNews = async (url) => {
-  try {
-    const options = {
-      url: url,
-      json: true,
-      headers: {
-        'User-Agent': 'News PWA Demo (https://github.com/tomayac/news-pwa)',
-      },
-    };
-    let data = await request.get(options);
-    if (typeof data !== 'object') {
-      data = data.replace(/<!--.*?-->/g, '');
-      data = JSON.parse(data);
-    }
-    return data;
-  } catch (e) {
-    return new Error('Invalid news provider.');
-  }
-};
-
-const parseNewsJson = (newsProvider, raw) => {
-  let parsed = [];
-  Object.keys(newsProvider.article).forEach((key) => {
-    let temp = jsonPath.nodes(raw, newsProvider.article[key].path);
-    temp = newsProvider.article[key].postprocess(temp);
-    // `temp` can be holey, so use a `for` loop that doesn't skip holes
-    for (let i = 0, lenI = temp.length; i < lenI; i++) {
-      const item = temp[i];
-      parsed[i] = parsed[i] || {
-        '@context': 'http://schema.org',
-        '@type': 'NewsArticle',
-        'publisher': newsProvider.publisher,
-      };
-      parsed[i][key] = item;
-    }
-  });
-  parsed = parsed.map((item) => {
-    if (item.author === undefined) {
-      // If there is no named `author`, the `author` is the `publisher`
-      item.author = newsProvider.publisher;
-    }
-    return item;
-  }).filter((item) => {
-    // Only consider articles with an `articleBody`
-    return item.articleBody;
-  });
-  return parsed;
-};
+news.updateCachedNews();
+setInterval(news.updateCachedNews, 60000);
 
 router.get('/(:newsProvider)?', async (req, res) => {
   try {
@@ -66,13 +19,17 @@ router.get('/(:newsProvider)?', async (req, res) => {
     if (typeof newsProvider === 'undefined') {
       return res.render('error', {providers: Object.keys(NEWS_PROVIDERS)});
     }
-    const raw = await getFrontPageNews(newsProvider.endpoint);
-    const parsed = parseNewsJson(newsProvider, raw);
+    if (!news.cachedNews[newsProvider]) {
+      return res.render('error', {
+        providers: Object.keys(NEWS_PROVIDERS),
+        error: `News for ${newsProvider.publisher} not available yet`,
+      });
+    }
     if (req.query.raw !== undefined) {
-      return res.json(parsed);
+      return res.json(news.cachedNews[newsProvider]);
     }
     return res.render('index', {
-      articles: parsed,
+      articles: news.cachedNews[newsProvider],
       locale: newsProvider.locale,
       publisher: newsProvider.publisher,
       home: req.params.newsProvider,
@@ -95,7 +52,8 @@ router.get('/:newsProvider/:section/:article', async (req, res) => {
     }
     const article = req.params.article;
     const section = req.params.section;
-    const raw = await getFrontPageNews(`${newsProvider.endpoint}${section}/${article}.json`);
+    const raw = await getFrontPageNews(`${newsProvider.endpoint}${section}/${
+      article}.json`);
     const parsed = parseNewsJson(newsProvider, {news: [raw]});
     if (req.query.raw !== undefined) {
       return res.json(parsed);

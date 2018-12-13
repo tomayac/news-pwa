@@ -40,3 +40,9 @@ block content
                   - const smallestImage = associatedMedium.sort((a, b) => a.width - b.width)[0]
                   img.associate-media(src='/img/placeholder.svg', data-src=smallestImage.url, style=`height:calc(var(--main-current-width)/(${smallestImage.width/smallestImage.height}))`, alt=smallestImage.caption, decoding='async')
                 figcaption.associate-media= associatedMedium[0].caption
+          if article.video
+            figure
+              video.associate-media(controls)
+                each source in article.video.sort((a, b) => b.width - a.width)
+                  source(src=source.contentUrl, media=`(min-width: ${source.width}px)`)
+              figcaption.associate-media= article.video[0].caption
