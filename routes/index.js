@@ -2,6 +2,7 @@ const express = require('express');
 const router = new express.Router();
 const news = require('../util/news.js');
 let Intl;
+// Use native Intl if possible
 if (require('full-icu').icu_small) {
   Intl = require('intl');
 }
@@ -10,24 +11,25 @@ const NEWS_PROVIDERS = {
   tagesschau: require('../schema_org-mappings/tagesschau'),
 };
 
-news.updateCachedNews();
-setInterval(news.updateCachedNews, 60000);
-
 router.get('/(:newsProvider)?', async (req, res) => {
   try {
     const newsProvider = NEWS_PROVIDERS[req.params.newsProvider];
+    // Invalid news provider
     if (typeof newsProvider === 'undefined') {
       return res.render('error', {providers: Object.keys(NEWS_PROVIDERS)});
     }
+    // News have not been fetched yet
     if (!news.cachedNews[newsProvider]) {
       return res.render('error', {
         providers: Object.keys(NEWS_PROVIDERS),
-        error: `News for ${newsProvider.publisher} not available yet`,
+        error: `News for ${newsProvider.publisher.name} not available yet`,
       });
     }
+    // Return raw JSON
     if (req.query.raw !== undefined) {
       return res.json(news.cachedNews[newsProvider]);
     }
+    // Regular rendered return
     return res.render('index', {
       articles: news.cachedNews[newsProvider],
       locale: newsProvider.locale,

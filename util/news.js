@@ -59,14 +59,18 @@ const news = {
   },
 
   updateCachedNews: async () => {
-    for (const [name, newsProvider] of Object.entries(NEWS_PROVIDERS)) {
-      const raw = await news.getFrontPageNews(newsProvider.endpoint);
-      const parsed = news.parseNewsJson(newsProvider, raw);
-      news.cachedNews[newsProvider] = parsed;
-      const hash = crypto.createHash('md5').update(JSON.stringify(parsed))
-          .digest('hex');
-      console.log(`${new Date().toISOString()}: Updated ${name}, hash: ${
-        hash}.`);
+    try {
+      for (const [name, newsProvider] of Object.entries(NEWS_PROVIDERS)) {
+        const raw = await news.getFrontPageNews(newsProvider.endpoint);
+        const parsed = news.parseNewsJson(newsProvider, raw);
+        news.cachedNews[newsProvider] = parsed;
+        const hash = crypto.createHash('md5').update(JSON.stringify(parsed))
+            .digest('hex');
+        console.log(`${new Date().toISOString()}: Updated ${name}, hash: ${
+          hash}.`);
+      }
+    } catch (err) {
+      console.error(err);
     }
   },
 };

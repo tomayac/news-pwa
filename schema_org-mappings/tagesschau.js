@@ -79,7 +79,7 @@ const extractVideos = (value) => {
   return result;
 };
 
-module.exports = {
+const tagesschau = {
   endpoint: 'https://www.tagesschau.de/api2/',
 
   publisher: {
@@ -97,7 +97,6 @@ module.exports = {
   locale: 'de-DE',
 
   article: {
-
     '@id': {
       path: '$.news[*].shareURL',
       postprocess: (content) => {
@@ -141,8 +140,6 @@ module.exports = {
             return;
           }
           let value = `<p>${item.value.value}</p>`;
-          // Remove `<strong>`
-          value = value.replace(/<\/?strong>/g, '');
           // Remove `<h2>`
           value = value.replace(/<\/?h2>/g, '');
           result[item.path[2]] = fixTypography(value);
@@ -162,8 +159,6 @@ module.exports = {
           } else if (item.value.type === 'headline') {
             value = item.value.value;
           }
-          // Remove `<strong>`
-          value = value.replace(/<\/?strong>/g, '');
           // Rewrite `<h2>` to `<h3>`
           value = value.replace(/<(\/?)h2>/g, '<$1h3>');
           // Fix typography
@@ -183,6 +178,28 @@ module.exports = {
           const value = item.value.gallery.map((imgObj) => {
             return extractImages(imgObj);
           });
+          result[item.path[2]] = result[item.path[2]] ?
+              result[item.path[2]].concat(value) : value;
+        });
+        return result;
+      },
+    },
+
+    'backstory': {
+      'path': '$.news[*].content[?(@.type=="box")]',
+      postprocess: (content) => {
+        const result = [];
+        content.forEach((item) => {
+          const box = item.value.box;
+          const value = [{
+            '@type': 'CreativeWork',
+            headline: box.title,
+            alternativeHeadline: box.subtitle,
+            images: item.images ? extractImages(box.images) : [],
+            description: box.text,
+            url: box.link ? box.link.replace(/.*href="([^"]+)".*/, '$1') : '',
+            citation: box.source ? box.source : '',
+          }];
           result[item.path[2]] = result[item.path[2]] ?
               result[item.path[2]].concat(value) : value;
         });
@@ -298,3 +315,5 @@ module.exports = {
 
   },
 };
+
+module.exports = tagesschau;

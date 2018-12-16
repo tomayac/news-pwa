@@ -7,6 +7,7 @@ const spdy = require('spdy');
 const http = require('http');
 
 const indexRouter = require('./routes/index');
+const news = require('./util/news.js');
 
 const PORT = process.env.PORT || 3000;
 
@@ -22,6 +23,10 @@ app.use(compression());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
+
+// Start the news fetcher
+news.updateCachedNews();
+setInterval(news.updateCachedNews, 60000);
 
 const server = spdy.createServer(http.Server, {
   protocols: ['h2'],
