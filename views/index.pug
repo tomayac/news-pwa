@@ -46,3 +46,9 @@ block content
                 each source in article.video.sort((a, b) => b.width - a.width)
                   source(src=source.contentUrl, media=`(min-width: ${source.width}px)`)
               figcaption.associate-media= article.video[0].caption
+          if article.audio
+            figure
+              audio.associate-media(controls, preload='metadata')
+                each source in article.audio
+                  source(src=source.contentUrl)
+              figcaption.associate-media= `${article.audio[0].name} (${article.audio[0].description})`

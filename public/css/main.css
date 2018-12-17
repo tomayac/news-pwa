@@ -1,6 +1,6 @@
 :root {
   --overscroll-bg-color: white;
-  --logo-bg-color: white;
+  --logo-bg-color: #005b9c;
   --main-bg-color: white;
   --main-color: #263238;
   --main-headline-color: black;
@@ -9,12 +9,16 @@
   --figcaption-color: white;
   --figcaption-bg-color: rgba(0, 0, 0, 0.75);
   --link-color: red;
+  --blockquote-bg-color: #eee;
+
   --primary-heading-font: 'Amstelvar-Roman-VF';
   --secondary-heading-font: 'Amstelvar-Roman-VF';
   --tertiary-heading-font: 'Amstelvar-Roman-VF';
+
   --body-font-size: 12pt;
   --body-min-width: 240px;
   --body-max-width: 1000px;
+
   --main-current-width: var(--body-max-width);
 }
 
@@ -53,11 +57,15 @@ body {
 
 body > header {
   background-color: var(--logo-bg-color);
-  padding: 0 0 1rem 0;
+  padding: 0 0.25rem;
 }
 
 header img {
   max-width: 100%;
+}
+
+a > h1 {
+  border: none;
 }
 
 article {
@@ -187,4 +195,16 @@ picture + figcaption {
 
 video + figcaption {
   top: 0;
+}
+
+blockquote {
+  background-color: var(--blockquote-bg-color);
+}
+
+blockquote::before {
+  color: var(--tertiary-headline-color);
+  content: "“";
+  position: absolute;
+  left: 0.75rem;
+  font-size: 4rem;
 }

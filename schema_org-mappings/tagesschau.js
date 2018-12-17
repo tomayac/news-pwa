@@ -45,7 +45,7 @@ const extractImages = (value) => {
 };
 
 const extractVideos = (value) => {
-  const result = [{
+  return [{
     '@type': 'VideoObject',
     'caption': value.title,
     'contentUrl': value.streams.h264xl,
@@ -76,7 +76,47 @@ const extractVideos = (value) => {
     'width': 256,
     'height': 144,
   }];
-  return result;
+};
+
+const extractAudios = (value) => {
+  if (value.teaserImage) {
+    return [{
+      '@type': 'AudioObject',
+      'contentUrl': value.stream,
+      'description': value.text,
+      'name': value.title,
+      'thumbnailUrl': value.teaserImage.videowebl.imageurl,
+      'uploadDate': value.date,
+      'width': 1280,
+      'height': 720,
+    }, {
+      '@type': 'AudioObject',
+      'contentUrl': value.stream,
+      'description': value.text,
+      'name': value.title,
+      'thumbnailUrl': value.teaserImage.videowebm.imageurl,
+      'uploadDate': value.date,
+      'width': 512,
+      'height':288,
+    }, {
+      '@type': 'AudioObject',
+      'contentUrl': value.stream,
+      'description': value.text,
+      'name': value.title,
+      'thumbnailUrl': value.teaserImage.videowebs.imageurl,
+      'uploadDate': value.date,
+      'width': 256,
+      'height': 144,
+    }];
+  } else {
+    return [{
+      '@type': 'AudioObject',
+      'contentUrl': value.stream,
+      'description': value.text,
+      'name': value.title,
+      'uploadDate': value.date,
+    }];
+  }
 };
 
 const tagesschau = {
@@ -148,7 +188,8 @@ const tagesschau = {
     },
 
     'articleBody': {
-      path: '$.news[*].content[?(@.type=="text" || @.type=="headline")]',
+      // eslint-disable-next-line max-len
+      path: '$.news[*].content[?(@.type=="text" || @.type=="headline" || @.type=="quotation")]',
       postprocess: (content) => {
         const result = [];
         content.forEach((item) => {
@@ -157,6 +198,8 @@ const tagesschau = {
             value = `<p>${item.value.value}</p>`;
           } else if (item.value.type === 'headline') {
             value = item.value.value;
+          } else if (item.value.type === 'quotation') {
+            value = `<blockquote>${item.value.quotation.text}</blockquote>`;
           }
           // Rewrite `<h2>` to `<h3>`
           value = value.replace(/<(\/?)h2>/g, '<$1h3>');
@@ -290,12 +333,24 @@ const tagesschau = {
     },
 
     'video': {
-      path: '$.news[1].content[*].video',
+      path: '$.news[*].content[*].video',
       postprocess: (content) => {
         const result = [];
         content.forEach((item) => {
           const value = item.value;
           result[item.path[2]] = extractVideos(value);
+        });
+        return result;
+      },
+    },
+
+    'audio': {
+      path: '$.news[*].content[*].audio',
+      postprocess: (content) => {
+        const result = [];
+        content.forEach((item) => {
+          const value = item.value;
+          result[item.path[2]] = extractAudios(value);
         });
         return result;
       },
@@ -307,6 +362,25 @@ const tagesschau = {
         const result = [];
         content.forEach((item) => {
           result[item.path[2]] = item.value;
+        });
+        return result;
+      },
+    },
+
+    'mentions': {
+      path: '$.news[*].content[?(@.type=="list")]',
+      postprocess: (content) => {
+        const result = [];
+        content.forEach((item) => {
+          const value = item.value.list.items.map(item => {
+            return {
+              // NewsArticle/Article require more details that aren't available
+              '@type': 'CreativeWork',
+              'headline': item.url.replace(/.*?>(.+?)<\/a>.*?/, '$1'),
+              'url': item.url.replace(/.*href="([^"]+)".*/, '$1')
+            };
+          });
+          result[item.path[2]] = value;
         });
         return result;
       },
