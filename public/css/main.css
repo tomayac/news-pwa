@@ -1,5 +1,6 @@
 :root {
   --overscroll-bg-color: white;
+  --logo-bg-color: white;
   --main-bg-color: white;
   --main-color: #263238;
   --main-headline-color: black;
@@ -51,8 +52,8 @@ body {
 }
 
 body > header {
-  background-color: var(--main-headline-color);
-  padding: 0 0.25rem;
+  background-color: var(--logo-bg-color);
+  padding: 0 0 1rem 0;
 }
 
 header img {
