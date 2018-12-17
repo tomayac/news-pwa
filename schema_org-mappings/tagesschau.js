@@ -86,9 +86,9 @@ const tagesschau = {
     '@type': 'Organization',
     'logo': {
       '@type': 'ImageObject',
-      'width': 600,
-      'height': 113,
-      'url': 'https://news-pwa.glitch.me/img/tagesschau.svg',
+      'width': 262,
+      'height': 60,
+      'url': 'https://news-pwa.glitch.me/img/tagesschau.png',
     },
     'name': 'tagesschau.de',
   },
