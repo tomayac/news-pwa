@@ -16,10 +16,6 @@ block content
           span
             img.icon(src='/img/calendar.svg', alt='')
             time(datetime=article.datePublished)= `${new Intl.DateTimeFormat(`${locale}`, {year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit'}).format(new Date(article.datePublished))}`
-          if article.author
-            span
-              img.icon(src='/img/author.svg', alt='')
-              | #{article.author.name}
       section
         figure(lazyload)
           picture
@@ -28,6 +24,17 @@ block content
             - const smallestImage = article.image.sort((a, b) => a.width - b.width)[0]
             img(src='/img/placeholder.svg', data-src=smallestImage.url, style=`height:calc(var(--main-current-width)/(${smallestImage.width/smallestImage.height}))`, alt=smallestImage.caption, decoding='async')
           figcaption= article.image[0].caption
+        .metadata
+          if article.author
+            span
+              img.icon(src='/img/author.svg', alt='')
+              | #{article.author.name}
+          span
+            img.icon(src='/img/timerequired.svg', alt='')
+            | #{article.timeRequired}
+          span
+            img.icon(src='/img/wordcount.svg', alt='')
+            | #{article.wordCount}
         details(open=articles.length === 1 ? true : false)
           summary!= article.description
           section!= article.articleBody

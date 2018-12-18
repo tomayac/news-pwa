@@ -1,6 +1,7 @@
 const request = require('request-promise-native');
 const jsonPath = require('jsonpath');
 const crypto = require('crypto');
+const readingTime = require('reading-time');
 
 const NEWS_PROVIDERS = {
   tagesschau: require('../schema_org-mappings/tagesschau'),
@@ -45,15 +46,19 @@ const news = {
         parsed[i][key] = item;
       }
     });
-    parsed = parsed.map((item) => {
+    parsed = parsed.filter((item) => {
+      // Only consider articles with an `articleBody`
+      return item.articleBody;
+    }).map((item) => {
+      // Add rough article stats
+      const articleStats = readingTime(item.articleBody);
+      item.timeRequired = `PT${Math.ceil(articleStats.minutes)}M`;
+      item.wordCount = articleStats.words;
       if (item.author === undefined) {
         // If there is no named `author`, the `author` is the `publisher`
         item.author = newsProvider.publisher;
       }
       return item;
-    }).filter((item) => {
-      // Only consider articles with an `articleBody`
-      return item.articleBody;
     });
     return parsed;
   },

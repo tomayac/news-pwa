@@ -22,6 +22,7 @@
     "intl": "^1.2.5",
     "jsonpath": "^1.0.0",
     "pug": "^2.0.3",
+    "reading-time": "^1.1.3",
     "request": "^2.88.0",
     "request-promise-native": "^1.0.5",
     "spdy": "^4.0.0"
