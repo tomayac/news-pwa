@@ -2,15 +2,16 @@ head
   meta(charset='utf-8')
   meta(name='viewport', content='width=device-width,minimum-scale=1,initial-scale=1')
   meta(http-equiv='Content-Security-Policy' content='upgrade-insecure-requests')
-  title 📰 News Progressive Web App
+  title News Progressive Web App
   link(rel='stylesheet', href='/css/main.css')
   link(rel='preload', href='/fonts/Amstelvar-Roman-VF.woff2', as='font', crossorigin)
   link(rel='preload', href='/js/lazyload.mjs', as='script', crossorigin)
   link(rel='preload', href='/js/main.mjs', as='script', crossorigin)
   link(rel='preload', href='/img/placeholder.svg', as='image')
   link(rel='manifest', href='/manifest.webmanifest')
-  link(rel='apple-touch-icon' sizes="120x120" href='/icons/newspaper_120x120.png')
-  link(rel='apple-touch-icon' sizes="144x144" href='/icons/newspaper_144x144.png')
+  link(rel='apple-touch-icon', sizes='120x120', href='/icons/newspaper_120x120.png')
+  link(rel='apple-touch-icon', sizes='144x144', href='/icons/newspaper_144x144.png')
+  link(rel='icon', href='/icons/newspaper_120x120.png')
   script.
     if (!('IntersectionObserver' in window)) {
       document.write('<script src="https://unpkg.com/intersection-observer@0.5.0/intersection-observer.js"><\/script>');

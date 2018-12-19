@@ -110,6 +110,20 @@ a {
   text-decoration-color: var(--link-color);
 }
 
+@supports (text-decoration-color: red) {
+  a {
+    text-decoration: underline;
+    text-decoration-color: var(--link-color);
+  }
+}
+
+@supports not (text-decoration-color: red) {
+  a {
+    text-decoration: none;
+    border-bottom: solid 1px var(--link-color);
+  }
+}
+
 .icon {
   height: 1.25rem;
   width: 1.25rem;
