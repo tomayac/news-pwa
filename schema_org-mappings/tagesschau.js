@@ -1,9 +1,19 @@
+const jsdom = require('jsdom');
+
 const fixTypography = (value) => {
-  return value
-      // Curly quotes
-      .replace(/"(.*?)"/gm, '“$1”')
-      // Proper em-dashes with breaking thin space
-      .replace(/\s-\s/gm, ' — ');
+  const dom = new jsdom.JSDOM(value);
+  const win = dom.window;
+  const doc = win.document;
+  const treeWalker = doc.createTreeWalker(doc.body, win.NodeFilter.SHOW_TEXT, null, false);
+  let next;
+  while (next = treeWalker.nextNode()) {
+    next.textContent = next.textContent
+    // Curly quotes
+        .replace(/"(.*?)"/gm, '“$1”')
+    // Proper em-dashes with breaking thin space
+        .replace(/\s-\s/gm, ' — ');
+  }
+  return doc.body.innerHTML;
 };
 
 const extractImages = (value) => {
