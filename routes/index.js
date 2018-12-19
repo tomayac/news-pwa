@@ -37,7 +37,7 @@ router.get('/(:newsProvider)?', async (req, res) => {
       publisher: newsProvider.publisher,
       home: req.params.newsProvider,
       Intl: Intl,
-      duration: moment.duration
+      duration: moment.duration,
     });
   } catch (error) {
     console.error(error);

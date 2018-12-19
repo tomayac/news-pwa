@@ -97,7 +97,7 @@ const extractAudios = (value) => {
       'thumbnailUrl': value.teaserImage.videowebm.imageurl,
       'uploadDate': value.date,
       'width': 512,
-      'height':288,
+      'height': 288,
     }, {
       '@type': 'AudioObject',
       'contentUrl': value.stream,
@@ -229,18 +229,18 @@ const tagesschau = {
 
     'backstory': {
       'path': '$.news[*].content[?(@.type=="box")]',
-      postprocess: (content) => {
+      'postprocess': (content) => {
         const result = [];
         content.forEach((item) => {
           const box = item.value.box;
           const value = [{
             '@type': 'CreativeWork',
-            headline: box.title,
-            alternativeHeadline: box.subtitle,
-            images: item.images ? extractImages(box.images) : [],
-            description: box.text,
-            url: box.link ? box.link.replace(/.*href="([^"]+)".*/, '$1') : '',
-            citation: box.source ? box.source : '',
+            'headline': box.title,
+            'alternativeHeadline': box.subtitle,
+            'images': item.images ? extractImages(box.images) : [],
+            'description': box.text,
+            'url': box.link ? box.link.replace(/.*href="([^"]+)".*/, '$1') : '',
+            'citation': box.source ? box.source : '',
           }];
           result[item.path[2]] = result[item.path[2]] ?
               result[item.path[2]].concat(value) : value;
@@ -372,12 +372,12 @@ const tagesschau = {
       postprocess: (content) => {
         const result = [];
         content.forEach((item) => {
-          const value = item.value.list.items.map(item => {
+          const value = item.value.list.items.map((item) => {
             return {
               // NewsArticle/Article require more details that aren't available
               '@type': 'CreativeWork',
               'headline': item.url.replace(/.*?>(.+?)<\/a>.*?/, '$1'),
-              'url': item.url.replace(/.*href="([^"]+)".*/, '$1')
+              'url': item.url.replace(/.*href="([^"]+)".*/, '$1'),
             };
           });
           result[item.path[2]] = value;
