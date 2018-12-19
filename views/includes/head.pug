@@ -7,9 +7,11 @@ head
   link(rel='preload', href='/js/lazyload.mjs', as='script', crossorigin)
   link(rel='preload', href='/js/main.mjs', as='script', crossorigin)
   link(rel='preload', href='/img/placeholder.svg', as='image')
+  link(rel='manifest', href='/manifest.webmanifest')
   script.
     if (!('IntersectionObserver' in window)) {
       document.write('<script src="https://unpkg.com/intersection-observer@0.5.0/intersection-observer.js"><\/script>');
     }
+    document.documentElement.style.setProperty('--main-current-width', `${window.innerWidth - 8}px`);
   script(type='module', src='/js/lazyload.mjs', defer)
   script(type='module', src='/js/main.mjs', defer)

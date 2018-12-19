@@ -6,6 +6,7 @@ let Intl;
 if (require('full-icu').icu_small) {
   Intl = require('intl');
 }
+const moment = require('moment');
 
 const NEWS_PROVIDERS = {
   tagesschau: require('../schema_org-mappings/tagesschau'),
@@ -36,6 +37,7 @@ router.get('/(:newsProvider)?', async (req, res) => {
       publisher: newsProvider.publisher,
       home: req.params.newsProvider,
       Intl: Intl,
+      duration: moment.duration
     });
   } catch (error) {
     console.error(error);

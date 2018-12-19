@@ -47,8 +47,8 @@ const news = {
       }
     });
     parsed = parsed.filter((item) => {
-      // Only consider articles with an `articleBody`
-      return item.articleBody;
+      // Only consider articles with an actual `articleBody`
+      return item.articleBody && /\w+\s\w+/u.test(item.articleBody);
     }).map((item) => {
       // Add rough article stats
       const articleStats = readingTime(item.articleBody);

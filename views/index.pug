@@ -18,12 +18,17 @@ block content
             time(datetime=article.datePublished)= `${new Intl.DateTimeFormat(`${locale}`, {year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit'}).format(new Date(article.datePublished))}`
       section
         figure(lazyload)
-          picture
-            each image in article.image.sort((a, b) => b.width - a.width)
-              source(srcset='/img/placeholder.svg', data-srcset=image.url, media=`(min-width: ${image.width}px)`)
-            - const smallestImage = article.image.sort((a, b) => a.width - b.width)[0]
-            img(src='/img/placeholder.svg', data-src=smallestImage.url, style=`height:calc(var(--main-current-width)/(${smallestImage.width/smallestImage.height}))`, alt=smallestImage.caption, decoding='async')
-          figcaption= article.image[0].caption
+          if article.image
+            picture
+              each image in article.image.sort((a, b) => b.width - a.width)
+                source(srcset='/img/placeholder.svg', data-srcset=image.url, media=`(min-width: ${image.width}px)`)
+              - const smallestImage = article.image.sort((a, b) => a.width - b.width)[0]
+              img(src='/img/placeholder.svg', data-src=smallestImage.url, style=`height:calc(var(--main-current-width)/(${smallestImage.width/smallestImage.height}))`, alt=smallestImage.caption, decoding='async')
+            figcaption= article.image[0].caption
+          else
+            picture
+              source(srcset='/img/placeholder.svg', data-srcset='/img/breakingnews.svg', media='(all)')
+              img(src='/img/placeholder.svg', data-src='/img/breakingnews.svg', style=`height:calc(var(--main-current-width)/(135/15))`, alt='', decoding='async')
         .metadata
           if article.author
             span
@@ -31,7 +36,7 @@ block content
               | #{article.author.name}
           span
             img.icon(src='/img/timerequired.svg', alt='')
-            | #{article.timeRequired}
+            | #{duration(article.timeRequired).minutes()}min
           span
             img.icon(src='/img/wordcount.svg', alt='')
             | #{article.wordCount}
@@ -48,14 +53,14 @@ block content
                   img.associate-media(src='/img/placeholder.svg', data-src=smallestImage.url, style=`height:calc(var(--main-current-width)/(${smallestImage.width/smallestImage.height}))`, alt=smallestImage.caption, decoding='async')
                 figcaption.associate-media= associatedMedium[0].caption
           if article.video
-            figure
-              video.associate-media(controls, preload='metadata', playsinline, poster=article.video[0].thumbnailUrl)
+            figure(lazyload)
+              video.associate-media(controls, preload='none', playsinline, poster='/img/placeholder.svg', style=`height:calc(var(--main-current-width)/(${article.video[0].width/article.video[0].height}))`, data-poster=article.video[0].thumbnailUrl)
                 each source in article.video.sort((a, b) => b.width - a.width)
                   source(src=source.contentUrl, media=`(min-width: ${source.width}px)`)
               figcaption.associate-media= article.video[0].caption
           if article.audio
-            figure
-              audio.associate-media(controls, preload='metadata')
+            figure(lazyload)
+              audio.associate-media(controls, preload='none')
                 each source in article.audio
                   source(src=source.contentUrl)
               figcaption.associate-media= `${article.audio[0].name} (${article.audio[0].description})`

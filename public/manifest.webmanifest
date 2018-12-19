@@ -1,0 +1,23 @@
+{
+  "name": "News Progressive Web App",
+  "short_name": "News PWA",
+  "dir": "auto",
+  "description": "A demo application that shows news from various sources",
+  "scope": "/",
+  "icons": [{
+      "src": "/icons/newspaper_120x120.png",
+      "sizes": "120x120",
+      "type": "image/png"
+    },
+    {
+      "src": "/icons/newspaper_144x144.png",
+      "sizes": "144x144",
+      "type": "image/png"
+    }
+  ],
+  "display": "standalone",
+  "orientation": "portrait",
+  "start_url": "/",
+  "theme_color": "black",
+  "background_color": "white"
+}
