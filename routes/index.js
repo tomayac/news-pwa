@@ -33,6 +33,7 @@ router.get('/(:newsProvider)?', async (req, res) => {
     // Regular rendered return
     return res.render('index', {
       articles: news.cachedNews[newsProvider],
+      contentDistributions: news.contentDistributions[newsProvider],
       locale: newsProvider.locale,
       publisher: newsProvider.publisher,
       home: req.params.newsProvider,
@@ -56,9 +57,9 @@ router.get('/:newsProvider/:section/:article', async (req, res) => {
     }
     const article = req.params.article;
     const section = req.params.section;
-    const raw = await getFrontPageNews(`${newsProvider.endpoint}${section}/${
-      article}.json`);
-    const parsed = parseNewsJson(newsProvider, {news: [raw]});
+    const raw = await news.getFrontPageNews(
+        `${newsProvider.endpoint}${section}/${article}.json`);
+    const parsed = news.parseNewsJson(newsProvider, {news: [raw]});
     if (req.query.raw !== undefined) {
       return res.json(parsed);
     }
@@ -68,6 +69,7 @@ router.get('/:newsProvider/:section/:article', async (req, res) => {
       publisher: newsProvider.publisher,
       home: req.params.newsProvider,
       Intl: Intl,
+      duration: moment.duration,
     });
   } catch (error) {
     console.error(error);

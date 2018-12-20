@@ -2,6 +2,7 @@ const request = require('request-promise-native');
 const jsonPath = require('jsonpath');
 const crypto = require('crypto');
 const readingTime = require('reading-time');
+const jsdom = require('jsdom');
 
 const NEWS_PROVIDERS = {
   tagesschau: require('../schema_org-mappings/tagesschau'),
@@ -9,6 +10,22 @@ const NEWS_PROVIDERS = {
 
 const news = {
   cachedNews: {},
+
+  contentDistributions: {},
+
+  distributeContent: (places, items) => {
+    if (places < items) {
+      return new Array(places).concat(Array(items).fill(true));
+    }
+    const bitmap = [];
+    const quotient = Math.floor((places - 1) / (items - 1));
+    let remainder = (places - 1) % (items -1);
+    let index = 0;
+    do {
+      bitmap[index] = true;
+    } while ((index += quotient + (remainder-- > 0 ? 1 : 0)) < places);
+    return bitmap;
+  },
 
   getFrontPageNews: async (url) => {
     try {
@@ -68,6 +85,15 @@ const news = {
       for (const [name, newsProvider] of Object.entries(NEWS_PROVIDERS)) {
         const raw = await news.getFrontPageNews(newsProvider.endpoint);
         const parsed = news.parseNewsJson(newsProvider, raw);
+        const distribution = parsed.map((article) => {
+          const dom = new jsdom.JSDOM(article.articleBody);
+          const doc = dom.window.document;
+          const places = doc.querySelectorAll('p').length;
+          const items = (article.video ? article.video.length : 0) +
+              (article.image ? article.image.length : 0);
+          return news.distributeContent(places, items);
+        });
+        news.contentDistributions[newsProvider] = distribution;
         news.cachedNews[newsProvider] = parsed;
         const hash = crypto.createHash('md5').update(JSON.stringify(parsed))
             .digest('hex');

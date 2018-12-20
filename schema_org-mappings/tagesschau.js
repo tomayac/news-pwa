@@ -4,7 +4,8 @@ const fixTypography = (value) => {
   const dom = new jsdom.JSDOM(value);
   const win = dom.window;
   const doc = win.document;
-  const treeWalker = doc.createTreeWalker(doc.body, win.NodeFilter.SHOW_TEXT, null, false);
+  const treeWalker = doc.createTreeWalker(doc.body, win.NodeFilter.SHOW_TEXT,
+      null, false);
   let next;
   while (next = treeWalker.nextNode()) {
     next.textContent = next.textContent
@@ -13,6 +14,19 @@ const fixTypography = (value) => {
     // Proper em-dashes with breaking thin space
         .replace(/\s-\s/gm, ' — ');
   }
+  return doc.body.innerHTML;
+};
+
+const fixLinks = (value) => {
+  const dom = new jsdom.JSDOM(value);
+  const doc = dom.window.document;
+  const links =
+      doc.querySelectorAll('a[href^="https://www.tagesschau.de/api2"]');
+  links.forEach((link) => {
+    link.href = link.href
+        .replace('https://www.tagesschau.de/api2', 'tagesschau')
+        .replace(/\.json$/, '');
+  });
   return doc.body.innerHTML;
 };
 
@@ -61,7 +75,8 @@ const extractVideos = (value) => {
     'contentUrl': value.streams.h264xl,
     'description': value.teaserImage.title,
     'name': value.alttext,
-    'thumbnailUrl': value.teaserImage.videowebl.imageurl,
+    'thumbnailUrl': value.teaserImage.videowebl ?
+        value.teaserImage.videowebl.imageurl : '',
     'uploadDate': value.date,
     'width': 1280,
     'height': 720,
@@ -71,7 +86,8 @@ const extractVideos = (value) => {
     'contentUrl': value.streams.h264m,
     'description': value.teaserImage.title,
     'name': value.alttext,
-    'thumbnailUrl': value.teaserImage.videowebm.imageurl,
+    'thumbnailUrl': value.teaserImage.videowebm ?
+        value.teaserImage.videowebm.imageurl : '',
     'uploadDate': value.date,
     'width': 512,
     'height': 288,
@@ -81,7 +97,8 @@ const extractVideos = (value) => {
     'contentUrl': value.streams.h264s,
     'description': value.teaserImage.title,
     'name': value.alttext,
-    'thumbnailUrl': value.teaserImage.videowebs.imageurl,
+    'thumbnailUrl': value.teaserImage.videowebs ?
+        value.teaserImage.videowebs.imageurl : '',
     'uploadDate': value.date,
     'width': 256,
     'height': 144,
@@ -215,6 +232,7 @@ const tagesschau = {
           value = value.replace(/<(\/?)h2>/g, '<$1h3>');
           // Fix typography
           value = fixTypography(value);
+          value = fixLinks(value);
           result[item.path[2]] = result[item.path[2]] ?
               result[item.path[2]] += value : value;
         });

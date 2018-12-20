@@ -107,6 +107,10 @@ a {
   text-decoration-color: var(--link-color);
 }
 
+a[href^="http"]::after {
+  content: url('../img/externallink.svg');
+}
+
 @supports (text-decoration-color: red) {
   a {
     text-decoration: underline;
