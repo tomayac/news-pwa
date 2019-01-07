@@ -101,6 +101,20 @@ h3 {
   margin: 0.5rem 0;
 }
 
+@supports (initial-letter: 2) {
+  p:nth-child(2)::first-letter {
+    initial-letter: 2;
+  }
+}
+
+@supports not (initial-letter: 2) {
+  p:nth-child(2)::first-letter {
+    font-size: 2.5em;
+    float: left;
+    line-height: 0.9em;
+  }
+}
+
 a {
   color: var(--main-color);
   text-decoration: underline;

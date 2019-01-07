@@ -106,7 +106,8 @@ const extractVideos = (value) => {
 };
 
 const extractAudios = (value) => {
-  if (value.teaserImage) {
+  if (value.teaserImage && value.teaserImage.videowebl &&
+      value.teaserImage.videowebm && value.teaserImage.videowebs) {
     return [{
       '@type': 'AudioObject',
       'contentUrl': value.stream,
