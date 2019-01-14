@@ -206,7 +206,8 @@ figure {
 }
 
 figure img,
-figure video {
+figure video,
+figure audio {
   display: block;
   width: 100%;
   height: auto;
