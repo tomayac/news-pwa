@@ -58,11 +58,14 @@
   "stylelint": {
     "extends": "stylelint-config-standard",
     "rules": {
-      "property-no-unknown": [true, {
-        "ignoreProperties": [
-          "initial-letter"
-        ]
-      }]
+      "property-no-unknown": [
+        true,
+        {
+          "ignoreProperties": [
+            "initial-letter"
+          ]
+        }
+      ]
     }
   }
 }
