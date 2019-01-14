@@ -19,6 +19,9 @@ head
     if (!('open' in document.createElement('details'))) {
       document.write('<script src="https://unpkg.com/details-element-polyfill@2.2.0/dist/details-element-polyfill.js"><\/script>');
     }
+    if (!('HTMLPictureElement' in window)) {
+      document.write('<script src="https://unpkg.com/picturefill@3.0.3/dist/picturefill.min"><\/script>');
+    }
     document.documentElement.style.setProperty('--main-current-width', `${window.innerWidth - 8}px`);
   script(type='module', src='/js/lazyload.mjs', defer)
   script(type='module', src='/js/main.mjs', defer)
