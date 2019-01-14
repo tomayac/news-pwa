@@ -169,6 +169,10 @@ summary::-webkit-details-marker {
   display: none;
 }
 
+summary::before {
+  content: '';
+}
+
 summary::after {
   background-color: white;
   content: url('../img/readmore.svg');
