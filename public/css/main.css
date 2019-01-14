@@ -171,6 +171,9 @@ summary::-webkit-details-marker {
 
 details > summary::before {
   content: '';
+  padding-right: initial;
+  font-size: initial;
+  cursor: initial;
 }
 
 summary::after {
