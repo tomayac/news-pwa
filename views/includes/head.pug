@@ -16,8 +16,7 @@ head
     if (!('IntersectionObserver' in window)) {
       /* document.write('<script
        src="https://unpkg.com/intersection-observer@0.5.0/intersection-observer.js"><\/script>'); */
-       document.write('<script
-              src="https://polyfill.io/v2/polyfill.min.js?features=IntersectionObserver"><\/script>');
+       document.write('<script src="https://polyfill.io/v2/polyfill.min.js?features=IntersectionObserver"><\/script>');
     }
     if (!('open' in document.createElement('details'))) {
       document.write('<script src="https://unpkg.com/details-element-polyfill@2.2.0/dist/details-element-polyfill.js"><\/script>');
@@ -28,3 +27,4 @@ head
     document.documentElement.style.setProperty('--main-current-width', `${window.innerWidth - 8}px`);
   script(type='module', src='/js/lazyload.mjs', defer)
   script(type='module', src='/js/main.mjs', defer)
+  script(nomodule, src='/js/bundle.js', defer)
