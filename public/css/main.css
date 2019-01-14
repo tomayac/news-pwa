@@ -210,6 +210,7 @@ figure video,
 figure audio {
   display: block;
   width: 100%;
+  max-width: 100%;
   height: auto;
   outline: solid 1px var(--secondary-headline-color);
 }
