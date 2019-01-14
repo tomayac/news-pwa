@@ -24,7 +24,10 @@ head
     }
     if (!window.CSS.supports('--a:0')) {
       document.write('<script src="https://unpkg.com/css-vars-ponyfill@1.16.2/dist/css-vars-ponyfill.min.js"><\/script>');
-      window.addEventListener('load', window.cssVars);
+      window.addEventListener('load', function(e) {
+        console.log('Executing cssVars()');
+        window.cssVars();
+      });
     }
     document.documentElement.style.setProperty('--main-current-width', `${window.innerWidth - 8}px`);
   script(type='module', src='/js/lazyload.mjs', defer)
