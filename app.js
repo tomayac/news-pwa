@@ -36,6 +36,6 @@ const server = spdy.createServer(http.Server, {
 }, app);
 
 const listener = server.listen(PORT, () => {
+  app.locals.hostname = listener.address().address;
   console.log('Your app is listening on port ' + listener.address().port);
 });
-

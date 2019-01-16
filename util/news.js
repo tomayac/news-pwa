@@ -6,6 +6,7 @@ const jsdom = require('jsdom');
 
 const NEWS_PROVIDERS = {
   tagesschau: require('../schema_org-mappings/tagesschau'),
+  bbc: require('../schema_org-mappings/bbc'),
 };
 
 const news = {

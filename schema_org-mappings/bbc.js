@@ -17,161 +17,42 @@ const fixTypography = (value) => {
   return doc.body.innerHTML;
 };
 
-const fixLinks = (value) => {
-  const dom = new jsdom.JSDOM(value);
-  const doc = dom.window.document;
-  const links =
-      doc.querySelectorAll('a[href^="https://www.tagesschau.de/api2"]');
-  links.forEach((link) => {
-    link.href = link.href
-        .replace('https://www.tagesschau.de/api2', 'tagesschau')
-        .replace(/\.json$/, '');
-  });
-  return doc.body.innerHTML;
-};
-
 const extractImages = (value) => {
   let result = [{
     '@type': 'ImageObject',
-    'caption': value.alttext,
-    'url': value.videowebl.imageurl,
-    'width': 960,
-    'height': 540,
-  }, {
-    '@type': 'ImageObject',
-    'caption': value.alttext,
-    'url': value.videowebm.imageurl,
-    'width': 512,
-    'height': 288,
-  }, {
-    '@type': 'ImageObject',
-    'caption': value.alttext,
-    'url': value.videowebs.imageurl,
-    'width': 256,
-    'height': 144,
+    'caption': value.content.alttext,
+    'url': value.content.href,
+    'width': value.content.width,
+    'height': value.content.height,
   }];
-  if (value.portraetgrossplus8x9 && value.portraetgross8x9) {
-    result = result.concat([{
-      '@type': 'ImageObject',
-      'caption': value.alttext,
-      'url': value.portraetgrossplus8x9.imageurl,
-      'width': 512,
-      'height': 576,
-    }, {
-      '@type': 'ImageObject',
-      'caption': value.alttext,
-      'url': value.portraetgross8x9.imageurl,
-      'width': 256,
-      'height': 288,
-    }]);
-  }
   return result;
 };
 
-const extractVideos = (value) => {
-  return [{
-    '@type': 'VideoObject',
-    'caption': value.title,
-    'contentUrl': value.streams.h264xl,
-    'description': value.teaserImage.title,
-    'name': value.alttext,
-    'thumbnailUrl': value.teaserImage.videowebl ?
-        value.teaserImage.videowebl.imageurl : '',
-    'uploadDate': value.date,
-    'width': 1280,
-    'height': 720,
-  }, {
-    '@type': 'VideoObject',
-    'caption': value.title,
-    'contentUrl': value.streams.h264m,
-    'description': value.teaserImage.title,
-    'name': value.alttext,
-    'thumbnailUrl': value.teaserImage.videowebm ?
-        value.teaserImage.videowebm.imageurl : '',
-    'uploadDate': value.date,
-    'width': 512,
-    'height': 288,
-  }, {
-    '@type': 'VideoObject',
-    'caption': value.title,
-    'contentUrl': value.streams.h264s,
-    'description': value.teaserImage.title,
-    'name': value.alttext,
-    'thumbnailUrl': value.teaserImage.videowebs ?
-        value.teaserImage.videowebs.imageurl : '',
-    'uploadDate': value.date,
-    'width': 256,
-    'height': 144,
-  }];
-};
-
-const extractAudios = (value) => {
-  if (value.teaserImage && value.teaserImage.videowebl &&
-      value.teaserImage.videowebm && value.teaserImage.videowebs) {
-    return [{
-      '@type': 'AudioObject',
-      'contentUrl': value.stream,
-      'description': value.text,
-      'name': value.title,
-      'thumbnailUrl': value.teaserImage.videowebl.imageurl,
-      'uploadDate': value.date,
-      'width': 1280,
-      'height': 720,
-    }, {
-      '@type': 'AudioObject',
-      'contentUrl': value.stream,
-      'description': value.text,
-      'name': value.title,
-      'thumbnailUrl': value.teaserImage.videowebm.imageurl,
-      'uploadDate': value.date,
-      'width': 512,
-      'height': 288,
-    }, {
-      '@type': 'AudioObject',
-      'contentUrl': value.stream,
-      'description': value.text,
-      'name': value.title,
-      'thumbnailUrl': value.teaserImage.videowebs.imageurl,
-      'uploadDate': value.date,
-      'width': 256,
-      'height': 144,
-    }];
-  } else {
-    return [{
-      '@type': 'AudioObject',
-      'contentUrl': value.stream,
-      'description': value.text,
-      'name': value.title,
-      'uploadDate': value.date,
-    }];
-  }
-};
-
-const tagesschau = {
-  endpoint: 'https://www.tagesschau.de/api2/',
+const bbc = {
+  endpoint: 'https://trevor-producer-cdn.api.bbci.co.uk/content/cps/news/front_page',
 
   publisher: {
     '@type': 'Organization',
     'logo': {
       '@type': 'ImageObject',
-      'width': 262,
-      'height': 60,
-      'url': 'https://news-pwa.glitch.me/img/tagesschau.png',
+      'width': 200,
+      'height': 57,
+      'url': `https://news-pwa.glitch.me/img/bbc.png`,
     },
     'icon': {
-      'src': '/icons/tagesschau_492x492.png',
+      'src': '/icons/bbc_492x492.png',
       'sizes': '492x492',
       'type': 'image/png',
     },
-    'name': 'tagesschau.de',
-    'slug': 'tagesschau',
+    'name': 'BBC News',
+    'slug': 'bbc',
   },
 
-  locale: 'de-DE',
+  locale: 'en-GB',
 
   article: {
     '@id': {
-      path: '$.news[*].shareURL',
+      path: '$.relations[*].content.id',
       postprocess: (content) => {
         const result = [];
         content.forEach((item) => {
@@ -182,7 +63,7 @@ const tagesschau = {
     },
 
     'headline': {
-      path: '$.news[*].title',
+      path: '$.relations[*].content.name',
       postprocess: (content) => {
         const result = [];
         content.forEach((item) => {
@@ -193,7 +74,7 @@ const tagesschau = {
     },
 
     'alternativeHeadline': {
-      path: '$.news[*].topline',
+      path: '$.relations[*].content.shortName',
       postprocess: (content) => {
         const result = [];
         content.forEach((item) => {
@@ -204,49 +85,27 @@ const tagesschau = {
     },
 
     'description': {
-      path: '$.news[*].content[0]',
+      path: '$.relations[*].content.summary',
       postprocess: (content) => {
         const result = [];
         content.forEach((item) => {
-          if ((!item.value.value) ||
-              (item.value.type !== 'text' && item.value.type !== 'headline')) {
-            return;
-          }
-          let value = `<p>${item.value.value}</p>`;
-          // Remove `<h2>`
-          value = value.replace(/<\/?h2>/g, '');
-          result[item.path[2]] = fixTypography(value);
+          result[item.path[2]] = fixTypography(item.value);
         });
         return result;
       },
     },
 
     'articleBody': {
-      // eslint-disable-next-line max-len
-      path: '$.news[*].content[?(@.type=="text" || @.type=="headline" || @.type=="quotation")]',
+      path: '$.relations[*].content.summary',
       postprocess: (content) => {
         const result = [];
         content.forEach((item) => {
-          let value;
-          if (item.value.type === 'text') {
-            value = `<p>${item.value.value}</p>`;
-          } else if (item.value.type === 'headline') {
-            value = item.value.value;
-          } else if (item.value.type === 'quotation') {
-            value = `<blockquote>${item.value.quotation.text}</blockquote>`;
-          }
-          // Rewrite `<h2>` to `<h3>`
-          value = value.replace(/<(\/?)h2>/g, '<$1h3>');
-          // Fix typography
-          value = fixTypography(value);
-          value = fixLinks(value);
-          result[item.path[2]] = result[item.path[2]] ?
-              result[item.path[2]] += value : value;
+          result[item.path[2]] = fixTypography(item.value);
         });
         return result;
       },
     },
-
+/*
     'associatedMedia': {
       path: '$.news[*].content[?(@.type=="image_gallery")]',
       postprocess: (content) => {
@@ -274,7 +133,7 @@ const tagesschau = {
             'alternativeHeadline': box.subtitle,
             'images': item.images ? extractImages(box.images) : [],
             'description': box.text,
-            'url': box.link ? box.link.replace(/.*href="([^"]+)".*/, '$1') : '',
+            'url': '',
             'citation': box.source ? box.source : '',
           }];
           result[item.path[2]] = result[item.path[2]] ?
@@ -283,19 +142,18 @@ const tagesschau = {
         return result;
       },
     },
-
+*/
     'articleSection': {
-      path: '$.news[*].ressort',
+      path: '$.relations[*].content.passport.category.categoryName',
       postprocess: (content) => {
         const result = [];
         content.forEach((item) => {
-          result[item.path[2]] =
-              `${item.value[0].toUpperCase()}${item.value.slice(1)}`;
+          result[item.path[2]] = item.value;
         });
         return result;
       },
     },
-
+/*
     'dateline': {
       path: '$.news[*].geotags',
       postprocess: (content) => {
@@ -306,9 +164,9 @@ const tagesschau = {
         return result;
       },
     },
-
+*/
     'datePublished': {
-      path: '$.news[*].date',
+      path: '$.relations[*].content.lastUpdated',
       postprocess: (content) => {
         const result = [];
         content.forEach((item) => {
@@ -319,7 +177,7 @@ const tagesschau = {
     },
 
     'dateModified': {
-      path: '$.news[*].date',
+      path: '$.relations[*].content.lastUpdated',
       postprocess: (content) => {
         const result = [];
         content.forEach((item) => {
@@ -328,7 +186,7 @@ const tagesschau = {
         return result;
       },
     },
-
+/*
     'mainEntityOfPage': {
       path: '$.news[*].shareURL',
       postprocess: (content) => {
@@ -354,9 +212,9 @@ const tagesschau = {
         return result;
       },
     },
-
+*/
     'image': {
-      path: '$.news[*].teaserImage',
+      path: '$.relations[*].content.relations[?(@.primaryType=="bbc.mobile.news.image")]',
       postprocess: (content) => {
         const result = [];
         content.forEach((item) => {
@@ -366,7 +224,7 @@ const tagesschau = {
         return result;
       },
     },
-
+/*
     'video': {
       path: '$.news[*].content[*].video',
       postprocess: (content) => {
@@ -412,7 +270,7 @@ const tagesschau = {
               // NewsArticle/Article require more details that aren't available
               '@type': 'CreativeWork',
               'headline': item.url.replace(/.*?>(.+?)<\/a>.*?/, '$1'),
-              'url': item.url.replace(/.*href="([^"]+)".*/, '$1'),
+              'url': '',
             };
           });
           result[item.path[2]] = value;
@@ -420,8 +278,8 @@ const tagesschau = {
         return result;
       },
     },
-
+*/
   },
 };
 
-module.exports = tagesschau;
+module.exports = bbc;
