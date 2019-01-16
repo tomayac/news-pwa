@@ -159,9 +159,9 @@ const tagesschau = {
       'url': 'https://news-pwa.glitch.me/img/tagesschau.png',
     },
     'icon': {
-      'src': '/icons/tagesschau.jpg',
+      'src': '/icons/tagesschau.png',
       'sizes': '492x492',
-      'type': 'image/jpeg',
+      'type': 'image/png',
     },
     'name': 'tagesschau.de',
     'slug': 'tagesschau',

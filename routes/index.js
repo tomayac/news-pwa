@@ -13,24 +13,18 @@ const NEWS_PROVIDERS = {
   tagesschau: require('../schema_org-mappings/tagesschau'),
 };
 
-router.get('/(:newsProvider/manifest.webmanifest)', (req, res) => {
+router.get('/(:newsProvider/)?manifest.webmanifest', (req, res) => {
+  res.setHeader('content-type', 'application/manifest+json');
   const newsProvider = NEWS_PROVIDERS[req.params.newsProvider];
   // Invalid news provider
   if (typeof newsProvider === 'undefined') {
-    return res.render('error', {providers: Object.keys(NEWS_PROVIDERS)});
+    return res.send(manifest);
   }
-  // News have not been fetched yet
-  if (!news.cachedNews[newsProvider]) {
-    return res.render('error', {
-      providers: Object.keys(NEWS_PROVIDERS),
-      error: `News for ${newsProvider.publisher.name} not available yet`,
-    });
-  }
-  res.setHeader('content-type', 'application/manifest+json');
-  manifest.name = newsProvider.publisher.name;
-  manifest.short_name = newsProvider.publisher.slug;
-  manifest.icons = [newsProvider.publisher.icon];
-  return res.send(manifest);
+  const dynamicManifest = JSON.parse(JSON.stringify(manifest));
+  dynamicManifest.name = newsProvider.publisher.name;
+  dynamicManifest.short_name = newsProvider.publisher.slug;
+  dynamicManifest.icons = [newsProvider.publisher.icon];
+  return res.send(dynamicManifest);
 });
 
 router.get('/(:newsProvider)?', async (req, res) => {
