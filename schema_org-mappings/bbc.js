@@ -176,17 +176,18 @@ const bbc = {
       },
     },
 
-    /*
     'mainEntityOfPage': {
-      path: '',
+      path: '$.relations[*].content.shareUrl',
       postprocess: (content) => {
         const result = [];
         content.forEach((item) => {
+          result[item.path[2]] = item.value;
         });
         return result;
       },
     },
 
+    /*
     'author': {
       path: '',
       postprocess: (content) => {
