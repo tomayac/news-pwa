@@ -148,9 +148,17 @@ const extractAudios = (value) => {
 };
 
 const tagesschau = {
-  endpoint: 'https://www.tagesschau.de/api2/',
+  'endpoint': 'https://www.tagesschau.de/api2/',
 
-  publisher: {
+  'icon': {
+    'src': '/icons/tagesschau_492x492.png',
+    'sizes': '492x492',
+    'type': 'image/png',
+  },
+
+  'slug': 'tagesschau',
+
+  'publisher': {
     '@type': 'Organization',
     'logo': {
       '@type': 'ImageObject',
@@ -158,18 +166,12 @@ const tagesschau = {
       'height': 60,
       'url': 'https://news-pwa.glitch.me/img/tagesschau.png',
     },
-    'icon': {
-      'src': '/icons/tagesschau_492x492.png',
-      'sizes': '492x492',
-      'type': 'image/png',
-    },
     'name': 'tagesschau.de',
-    'slug': 'tagesschau',
   },
 
-  locale: 'de-DE',
+  'locale': 'de-DE',
 
-  article: {
+  'article': {
     '@id': {
       path: '$.news[*].shareURL',
       postprocess: (content) => {

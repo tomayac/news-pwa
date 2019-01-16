@@ -8,10 +8,10 @@ head
   link(rel='preload', href='/js/lazyload.mjs', as='script', crossorigin)
   link(rel='preload', href='/js/main.mjs', as='script', crossorigin)
   link(rel='preload', href='/img/placeholder.svg', as='image')
-  link(rel='manifest', href=`${publisher ? `/${publisher.slug}` : ''}/manifest.webmanifest`)
+  link(rel='manifest', href=`${slug ? `/${slug}` : ''}/manifest.webmanifest`)
   if publisher
-    link(rel='apple-touch-icon', sizes=`${publisher.icon.sizes}`, href=publisher.icon.src)
-    link(rel='icon', href=publisher.icon.src)
+    link(rel='apple-touch-icon', sizes=icon.sizes, href=icon.src)
+    link(rel='icon', href=icon.src)
   else
     link(rel='apple-touch-icon', sizes='120x120', href='/icons/newspaper_120x120.png')
     link(rel='apple-touch-icon', sizes='144x144', href='/icons/newspaper_144x144.png')

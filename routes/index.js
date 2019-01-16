@@ -23,8 +23,8 @@ router.get('/(:newsProvider/)?manifest.webmanifest', (req, res) => {
   }
   const dynamicManifest = JSON.parse(JSON.stringify(manifest));
   dynamicManifest.name = newsProvider.publisher.name;
-  dynamicManifest.short_name = newsProvider.publisher.slug;
-  dynamicManifest.icons = [newsProvider.publisher.icon];
+  dynamicManifest.short_name = newsProvider.slug;
+  dynamicManifest.icons = [newsProvider.icon];
   return res.send(dynamicManifest);
 });
 
@@ -35,7 +35,7 @@ router.get('/(:newsProvider)?', async (req, res) => {
     if (typeof newsProvider === 'undefined') {
       return res.render('error', {providers: Object.keys(NEWS_PROVIDERS)});
     }
-    const slug = newsProvider.publisher.slug;
+    const slug = newsProvider.slug;
     // News have not been fetched yet
     if (!news.cachedNews[slug]) {
       return res.render('error', {
@@ -53,6 +53,8 @@ router.get('/(:newsProvider)?', async (req, res) => {
       contentDistributions: news.contentDistributions[slug],
       locale: newsProvider.locale,
       publisher: newsProvider.publisher,
+      slug: newsProvider.slug,
+      icon: newsProvider.icon,
       home: req.params.newsProvider,
       Intl: Intl,
       duration: moment.duration,
@@ -84,6 +86,8 @@ router.get('/:newsProvider/:section/:article', async (req, res) => {
       articles: parsed,
       locale: newsProvider.locale,
       publisher: newsProvider.publisher,
+      slug: newsProvider.slug,
+      icon: newsProvider.icon,
       home: req.params.newsProvider,
       Intl: Intl,
       duration: moment.duration,

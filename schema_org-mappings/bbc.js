@@ -30,9 +30,17 @@ const extractImages = (value) => {
 
 const bbc = {
   // eslint-disable-next-line max-len
-  endpoint: 'https://trevor-producer-cdn.api.bbci.co.uk/content/cps/news/front_page',
+  'endpoint': 'https://trevor-producer-cdn.api.bbci.co.uk/content/cps/news/front_page',
 
-  publisher: {
+  'icon': {
+    'src': '/icons/bbc_492x492.png',
+    'sizes': '492x492',
+    'type': 'image/png',
+  },
+
+  'slug': 'bbc',
+
+  'publisher': {
     '@type': 'Organization',
     'logo': {
       '@type': 'ImageObject',
@@ -40,18 +48,12 @@ const bbc = {
       'height': 57,
       'url': `https://news-pwa.glitch.me/img/bbc.png`,
     },
-    'icon': {
-      'src': '/icons/bbc_492x492.png',
-      'sizes': '492x492',
-      'type': 'image/png',
-    },
     'name': 'BBC News',
-    'slug': 'bbc',
   },
 
-  locale: 'en-GB',
+  'locale': 'en-GB',
 
-  article: {
+  'article': {
     '@id': {
       path: '$.relations[*].content.id',
       postprocess: (content) => {
@@ -157,7 +159,7 @@ const bbc = {
       postprocess: (content) => {
         const result = [];
         content.forEach((item) => {
-          result[item.path[2]] = item.value;
+          result[item.path[2]] = new Date(item.value);
         });
         return result;
       },
@@ -168,7 +170,7 @@ const bbc = {
       postprocess: (content) => {
         const result = [];
         content.forEach((item) => {
-          result[item.path[2]] = item.value;
+          result[item.path[2]] = new Date(item.value);
         });
         return result;
       },
