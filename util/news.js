@@ -94,8 +94,8 @@ const news = {
               (article.image ? article.image.length : 0);
           return news.distributeContent(places, items);
         });
-        news.contentDistributions[newsProvider] = distribution;
-        news.cachedNews[newsProvider] = parsed;
+        news.contentDistributions[name] = distribution;
+        news.cachedNews[name] = parsed;
         const hash = crypto.createHash('md5').update(JSON.stringify(parsed))
             .digest('hex');
         console.log(`${new Date().toISOString()}: Updated ${name}, hash: ${

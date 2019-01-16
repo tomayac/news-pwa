@@ -35,8 +35,9 @@ router.get('/(:newsProvider)?', async (req, res) => {
     if (typeof newsProvider === 'undefined') {
       return res.render('error', {providers: Object.keys(NEWS_PROVIDERS)});
     }
+    const slug = newsProvider.publisher.slug;
     // News have not been fetched yet
-    if (!news.cachedNews[newsProvider]) {
+    if (!news.cachedNews[slug]) {
       return res.render('error', {
         providers: Object.keys(NEWS_PROVIDERS),
         error: `News for ${newsProvider.publisher.name} not available yet`,
@@ -44,12 +45,12 @@ router.get('/(:newsProvider)?', async (req, res) => {
     }
     // Return raw JSON
     if (req.query.raw !== undefined) {
-      return res.json(news.cachedNews[newsProvider]);
+      return res.json(news.cachedNews[slug]);
     }
     // Regular rendered return
     return res.render('index', {
-      articles: news.cachedNews[newsProvider],
-      contentDistributions: news.contentDistributions[newsProvider],
+      articles: news.cachedNews[slug],
+      contentDistributions: news.contentDistributions[slug],
       locale: newsProvider.locale,
       publisher: newsProvider.publisher,
       home: req.params.newsProvider,
