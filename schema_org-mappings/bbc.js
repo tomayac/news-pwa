@@ -18,7 +18,7 @@ const fixTypography = (value) => {
 };
 
 const extractImages = (value) => {
-  let result = [{
+  const result = [{
     '@type': 'ImageObject',
     'caption': value.content.alttext,
     'url': value.content.href,
@@ -29,6 +29,7 @@ const extractImages = (value) => {
 };
 
 const bbc = {
+  // eslint-disable-next-line max-len
   endpoint: 'https://trevor-producer-cdn.api.bbci.co.uk/content/cps/news/front_page',
 
   publisher: {
@@ -105,44 +106,29 @@ const bbc = {
         return result;
       },
     },
-/*
+
+    /*
     'associatedMedia': {
-      path: '$.news[*].content[?(@.type=="image_gallery")]',
+      path: '',
       postprocess: (content) => {
         const result = [];
         content.forEach((item) => {
-          const value = item.value.gallery.map((imgObj) => {
-            return extractImages(imgObj);
-          });
-          result[item.path[2]] = result[item.path[2]] ?
-              result[item.path[2]].concat(value) : value;
         });
         return result;
       },
     },
 
     'backstory': {
-      'path': '$.news[*].content[?(@.type=="box")]',
+      'path': '',
       'postprocess': (content) => {
         const result = [];
         content.forEach((item) => {
-          const box = item.value.box;
-          const value = [{
-            '@type': 'CreativeWork',
-            'headline': box.title,
-            'alternativeHeadline': box.subtitle,
-            'images': item.images ? extractImages(box.images) : [],
-            'description': box.text,
-            'url': '',
-            'citation': box.source ? box.source : '',
-          }];
-          result[item.path[2]] = result[item.path[2]] ?
-              result[item.path[2]].concat(value) : value;
         });
         return result;
       },
     },
-*/
+    */
+
     'articleSection': {
       path: '$.relations[*].content.passport.category.categoryName',
       postprocess: (content) => {
@@ -153,18 +139,19 @@ const bbc = {
         return result;
       },
     },
-/*
+
+    /*
     'dateline': {
-      path: '$.news[*].geotags',
+      path: '',
       postprocess: (content) => {
         const result = [];
         content.forEach((item) => {
-          result[item.path[2]] = item.value.map((tag) => tag.tag).join(', ');
         });
         return result;
       },
     },
-*/
+    */
+
     'datePublished': {
       path: '$.relations[*].content.lastUpdated',
       postprocess: (content) => {
@@ -186,34 +173,31 @@ const bbc = {
         return result;
       },
     },
-/*
+
+    /*
     'mainEntityOfPage': {
-      path: '$.news[*].shareURL',
+      path: '',
       postprocess: (content) => {
         const result = [];
         content.forEach((item) => {
-          result[item.path[2]] = item.value;
         });
         return result;
       },
     },
 
     'author': {
-      // eslint-disable-next-line max-len
-      path: '$.news[*].content[*][?(@.title=="Korrespondentin" || @.title=="Korrespondent")].text',
+      path: '',
       postprocess: (content) => {
         const result = [];
         content.forEach((item) => {
-          result[item.path[2]] = {
-            '@type': 'Person',
-            'name': item.value.split(',')[0],
-          };
         });
         return result;
       },
     },
-*/
+    */
+
     'image': {
+      // eslint-disable-next-line max-len
       path: '$.relations[*].content.relations[?(@.primaryType=="bbc.mobile.news.image")]',
       postprocess: (content) => {
         const result = [];
@@ -224,61 +208,49 @@ const bbc = {
         return result;
       },
     },
-/*
+
+    /*
     'video': {
-      path: '$.news[*].content[*].video',
+      path: '',
       postprocess: (content) => {
         const result = [];
         content.forEach((item) => {
-          const value = item.value;
-          result[item.path[2]] = extractVideos(value);
         });
         return result;
       },
     },
 
     'audio': {
-      path: '$.news[*].content[*].audio',
+      path: '',
       postprocess: (content) => {
         const result = [];
         content.forEach((item) => {
-          const value = item.value;
-          result[item.path[2]] = extractAudios(value);
         });
         return result;
       },
     },
 
     'thumbnailUrl': {
-      path: '$.news[*].images[*].videowebs.imageurl',
+      path: '',
       postprocess: (content) => {
         const result = [];
         content.forEach((item) => {
-          result[item.path[2]] = item.value;
         });
         return result;
       },
     },
 
     'mentions': {
-      path: '$.news[*].content[?(@.type=="list")]',
+      path: '',
       postprocess: (content) => {
         const result = [];
         content.forEach((item) => {
-          const value = item.value.list.items.map((item) => {
-            return {
-              // NewsArticle/Article require more details that aren't available
-              '@type': 'CreativeWork',
-              'headline': item.url.replace(/.*?>(.+?)<\/a>.*?/, '$1'),
-              'url': '',
-            };
-          });
-          result[item.path[2]] = value;
         });
         return result;
       },
     },
-*/
+    */
+
   },
 };
 
