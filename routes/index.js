@@ -7,10 +7,31 @@ if (require('full-icu').icu_small) {
   Intl = require('intl');
 }
 const moment = require('moment');
+const manifest = require('./manifest.webmanifest.json');
 
 const NEWS_PROVIDERS = {
   tagesschau: require('../schema_org-mappings/tagesschau'),
 };
+
+router.get('/(:newsProvider/manifest.webmanifest)', (req, res) => {
+  const newsProvider = NEWS_PROVIDERS[req.params.newsProvider];
+  // Invalid news provider
+  if (typeof newsProvider === 'undefined') {
+    return res.render('error', {providers: Object.keys(NEWS_PROVIDERS)});
+  }
+  // News have not been fetched yet
+  if (!news.cachedNews[newsProvider]) {
+    return res.render('error', {
+      providers: Object.keys(NEWS_PROVIDERS),
+      error: `News for ${newsProvider.publisher.name} not available yet`,
+    });
+  }
+  res.setHeader('content-type', 'application/manifest+json');
+  manifest.name = newsProvider.publisher.name;
+  manifest.short_name = newsProvider.publisher.slug;
+  manifest.icons = [newsProvider.publisher.icon];
+  return res.send(manifest);
+});
 
 router.get('/(:newsProvider)?', async (req, res) => {
   try {

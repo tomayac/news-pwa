@@ -8,7 +8,7 @@ head
   link(rel='preload', href='/js/lazyload.mjs', as='script', crossorigin)
   link(rel='preload', href='/js/main.mjs', as='script', crossorigin)
   link(rel='preload', href='/img/placeholder.svg', as='image')
-  link(rel='manifest', href='/manifest.webmanifest')
+  link(rel='manifest', href=`${publisher ? publisher.slug : ''}/manifest.webmanifest`)
   link(rel='apple-touch-icon', sizes='120x120', href='/icons/newspaper_120x120.png')
   link(rel='apple-touch-icon', sizes='144x144', href='/icons/newspaper_144x144.png')
   link(rel='icon', href='/icons/newspaper_120x120.png')

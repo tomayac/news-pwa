@@ -158,7 +158,13 @@ const tagesschau = {
       'height': 60,
       'url': 'https://news-pwa.glitch.me/img/tagesschau.png',
     },
+    'icon': {
+      'src': '/icons/tagesschau.jpg',
+      'sizes': '492x492',
+      'type': 'image/jpeg',
+    },
     'name': 'tagesschau.de',
+    'slug': 'tagesschau',
   },
 
   locale: 'de-DE',
