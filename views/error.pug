@@ -8,6 +8,6 @@ block content
       li
         | 📰
         |
-        a(href=`/${provider}`)= `${provider}`
+        a(href=`/${provider.slug}`)= `${provider.publisher.name}`
   if error
     pre= error

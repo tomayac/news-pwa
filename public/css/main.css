@@ -1,19 +1,4 @@
 :root {
-  --overscroll-bg-color: white;
-  --logo-bg-color: #005b9c;
-  --main-bg-color: white;
-  --main-color: #263238;
-  --main-headline-color: black;
-  --secondary-headline-color: #828282;
-  --tertiary-headline-color: rgb(0, 90, 177);
-  --figcaption-color: white;
-  --figcaption-bg-color: rgba(0, 0, 0, 0.75);
-  --link-color: red;
-  --blockquote-bg-color: #eee;
-  --primary-heading-font: 'Amstelvar-Roman-VF';
-  --secondary-heading-font: 'Amstelvar-Roman-VF';
-  --tertiary-heading-font: 'Amstelvar-Roman-VF';
-  --body-font-size: 12pt;
   --body-min-width: 240px;
   --body-max-width: 1000px;
   --main-current-width: var(--body-max-width);
@@ -108,7 +93,7 @@ h3 {
 }
 
 @supports not (initial-letter: 2) {
-  p:nth-child(2)::first-letter {
+  section > p:nth-child(2):not(section > p:nth-child(2) + em):not(section > p:nth-child(2) + strong)::first-letter {
     font-size: 2.5em;
     float: left;
     line-height: 0.9em;
@@ -169,7 +154,11 @@ summary::-webkit-details-marker {
   display: none;
 }
 
-details > summary::before {
+details {
+  position: relative;
+}
+
+summary::before {
   content: '';
   padding-right: initial;
   font-size: initial;
@@ -239,9 +228,11 @@ blockquote {
 }
 
 blockquote::before {
+  font-family: var(--primary-heading-font), Georgia, serif;
+  font-variation-settings: 'opsz' 144;
   color: var(--tertiary-headline-color);
   content: "“";
   position: absolute;
-  left: 0.75rem;
+  left: 0;
   font-size: 4rem;
 }

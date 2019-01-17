@@ -156,6 +156,23 @@ const tagesschau = {
     'type': 'image/png',
   },
 
+  'css': `
+    --overscroll-bg-color: white;
+    --logo-bg-color: #005b9c;
+    --main-bg-color: white;
+    --main-color: #263238;
+    --main-headline-color: black;
+    --secondary-headline-color: #828282;
+    --tertiary-headline-color: rgb(0, 90, 177);
+    --figcaption-color: white;
+    --figcaption-bg-color: rgba(0, 0, 0, 0.75);
+    --link-color: red;
+    --blockquote-bg-color: #eee;
+    --primary-heading-font: 'Amstelvar-Roman-VF';
+    --secondary-heading-font: 'Amstelvar-Roman-VF';
+    --tertiary-heading-font: 'Amstelvar-Roman-VF';
+    --body-font-size: 12pt;`,
+
   'slug': 'tagesschau',
 
   'publisher': {

@@ -38,6 +38,23 @@ const bbc = {
     'type': 'image/png',
   },
 
+'css': `
+  --overscroll-bg-color: white;
+  --logo-bg-color: #bb1919;
+  --main-bg-color: white;
+  --main-color: black;
+  --main-headline-color: #bb1919;
+  --secondary-headline-color: black;
+  --tertiary-headline-color: black;
+  --figcaption-color: white;
+  --figcaption-bg-color: rgba(0, 0, 0, 0.75);
+  --link-color: #bb1919;
+  --blockquote-bg-color: #eee;
+  --primary-heading-font: 'Amstelvar-Roman-VF';
+  --secondary-heading-font: 'Amstelvar-Roman-VF';
+  --tertiary-heading-font: 'Amstelvar-Roman-VF';
+  --body-font-size: 12pt;`,
+
   'slug': 'bbc',
 
   'publisher': {

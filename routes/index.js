@@ -1,3 +1,4 @@
+const fs = require('fs');
 const express = require('express');
 const router = new express.Router();
 const news = require('../util/news.js');
@@ -7,7 +8,9 @@ if (require('full-icu').icu_small) {
   Intl = require('intl');
 }
 const moment = require('moment');
-const manifest = require('./manifest.webmanifest.json');
+
+const manifest = fs.readFileSync('./public/manifest.webmanifest', 'utf8');
+const css = fs.readFileSync('./public/css/main.css', 'utf8');
 
 const NEWS_PROVIDERS = {
   tagesschau: require('../schema_org-mappings/tagesschau'),
@@ -28,18 +31,42 @@ router.get('/(:newsProvider/)?manifest.webmanifest', (req, res) => {
   return res.send(dynamicManifest);
 });
 
+router.get('/(:newsProvider/)?main.css', (req, res) => {
+  res.setHeader('content-type', 'text/css');
+  const newsProvider = NEWS_PROVIDERS[req.params.newsProvider];
+  // Invalid news provider
+  if (typeof newsProvider === 'undefined') {
+    return res.send(css);
+  }
+  const dynamicCss = css.replace(/:root \{/,
+      `:root {${newsProvider.css}`);
+  return res.send(dynamicCss);
+});
+
 router.get('/(:newsProvider)?', async (req, res) => {
   try {
     const newsProvider = NEWS_PROVIDERS[req.params.newsProvider];
     // Invalid news provider
     if (typeof newsProvider === 'undefined') {
-      return res.render('error', {providers: Object.keys(NEWS_PROVIDERS)});
+      return res.render('error', {
+        providers: Object.keys(NEWS_PROVIDERS).map((newsProvider) => {
+          return {
+            publisher: NEWS_PROVIDERS[newsProvider].publisher,
+            slug: NEWS_PROVIDERS[newsProvider].slug
+          };
+        })
+      });
     }
     const slug = newsProvider.slug;
     // News have not been fetched yet
     if (!news.cachedNews[slug]) {
       return res.render('error', {
-        providers: Object.keys(NEWS_PROVIDERS),
+        providers: Object.keys(NEWS_PROVIDERS).map((newsProvider) => {
+          return {
+            publisher: NEWS_PROVIDERS[newsProvider].publisher,
+            slug: NEWS_PROVIDERS[newsProvider].slug
+          };
+        }),
         error: `News for ${newsProvider.publisher.name} not available yet`,
       });
     }
@@ -62,7 +89,12 @@ router.get('/(:newsProvider)?', async (req, res) => {
   } catch (error) {
     console.error(error);
     return res.render('error', {
-      providers: Object.keys(NEWS_PROVIDERS),
+      providers: Object.keys(NEWS_PROVIDERS).map((newsProvider) => {
+        return {
+          publisher: NEWS_PROVIDERS[newsProvider].publisher,
+          slug: NEWS_PROVIDERS[newsProvider].slug
+        };
+      }),
       error: error,
     });
   }
@@ -95,7 +127,12 @@ router.get('/:newsProvider/:section/:article', async (req, res) => {
   } catch (error) {
     console.error(error);
     return res.render('error', {
-      providers: Object.keys(NEWS_PROVIDERS),
+      providers: Object.keys(NEWS_PROVIDERS).map((newsProvider) => {
+        return {
+          publisher: NEWS_PROVIDERS[newsProvider].publisher,
+          slug: NEWS_PROVIDERS[newsProvider].slug
+        };
+      }),
       error: error,
     });
   }
