@@ -38,7 +38,7 @@ const bbc = {
     'type': 'image/png',
   },
 
-'css': `
+  'css': `
   --overscroll-bg-color: white;
   --logo-bg-color: #bb1919;
   --main-bg-color: white;

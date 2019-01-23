@@ -52,9 +52,9 @@ router.get('/(:newsProvider)?', async (req, res) => {
         providers: Object.keys(NEWS_PROVIDERS).map((newsProvider) => {
           return {
             publisher: NEWS_PROVIDERS[newsProvider].publisher,
-            slug: NEWS_PROVIDERS[newsProvider].slug
+            slug: NEWS_PROVIDERS[newsProvider].slug,
           };
-        })
+        }),
       });
     }
     const slug = newsProvider.slug;
@@ -64,7 +64,7 @@ router.get('/(:newsProvider)?', async (req, res) => {
         providers: Object.keys(NEWS_PROVIDERS).map((newsProvider) => {
           return {
             publisher: NEWS_PROVIDERS[newsProvider].publisher,
-            slug: NEWS_PROVIDERS[newsProvider].slug
+            slug: NEWS_PROVIDERS[newsProvider].slug,
           };
         }),
         error: `News for ${newsProvider.publisher.name} not available yet`,
@@ -92,7 +92,7 @@ router.get('/(:newsProvider)?', async (req, res) => {
       providers: Object.keys(NEWS_PROVIDERS).map((newsProvider) => {
         return {
           publisher: NEWS_PROVIDERS[newsProvider].publisher,
-          slug: NEWS_PROVIDERS[newsProvider].slug
+          slug: NEWS_PROVIDERS[newsProvider].slug,
         };
       }),
       error: error,
@@ -130,7 +130,7 @@ router.get('/:newsProvider/:section/:article', async (req, res) => {
       providers: Object.keys(NEWS_PROVIDERS).map((newsProvider) => {
         return {
           publisher: NEWS_PROVIDERS[newsProvider].publisher,
-          slug: NEWS_PROVIDERS[newsProvider].slug
+          slug: NEWS_PROVIDERS[newsProvider].slug,
         };
       }),
       error: error,
