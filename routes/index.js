@@ -24,7 +24,7 @@ router.get('/(:newsProvider/)?manifest.webmanifest', (req, res) => {
   if (typeof newsProvider === 'undefined') {
     return res.send(manifest);
   }
-  const dynamicManifest = JSON.parse(JSON.stringify(manifest));
+  const dynamicManifest = JSON.parse(manifest);
   dynamicManifest.name = newsProvider.publisher.name;
   dynamicManifest.short_name = newsProvider.slug;
   dynamicManifest.icons = [newsProvider.icon];
