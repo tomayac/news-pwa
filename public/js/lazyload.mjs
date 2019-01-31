@@ -1,4 +1,4 @@
-(() => {
+export const lazyLoad = () => {
   const observer = new IntersectionObserver((entries) => {
     entries.forEach((entry) => {
       if (entry.intersectionRatio > 0) {
@@ -26,4 +26,4 @@
   for (const entry of entries) {
     observer.observe(entry);
   }
-})();
+};

@@ -1,3 +1,5 @@
+import {lazyLoad} from './lazyload.mjs';
+
 (() => {
   const main = document.querySelector('main');
 
@@ -26,4 +28,6 @@
           `${main.offsetWidth}px`);
     }, 250);
   });
+
+  lazyLoad();
 })();

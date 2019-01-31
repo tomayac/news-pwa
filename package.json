@@ -6,7 +6,7 @@
   "scripts": {
     "start": "node app.js",
     "lint": "npx eslint './**/*.js' --ignore-pattern '/node_modules/' --ignore-pattern 'bundle.js' --fix && npx eslint public/js/**.mjs && npx stylelint ./public/css/**.css",
-    "build": "npx babel --presets @babel/preset-env,minify public/js/*.mjs --out-file public/js/bundle.js"
+    "build": "npx babel --presets @babel/preset-env,minify public/js/main.mjs --out-file public/js/bundle.js"
   },
   "keywords": [
     "news",
