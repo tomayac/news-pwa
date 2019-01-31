@@ -94,9 +94,8 @@ h3 {
 
 @supports not (initial-letter: 2) {
   p:nth-child(2)::first-letter {
-    font-size: 2.5em;
+    font-size: calc(2 * (var(--body-font-size) + 0.1vw));
     float: left;
-    line-height: 0.9em;
   }
 }
 
