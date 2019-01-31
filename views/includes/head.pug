@@ -19,6 +19,7 @@ head
   script.
     function loadScript(src, done) {
       var js = document.createElement('script');
+      js.defer = true;
       js.src = src;
       js.onload = done;
       js.onerror = function() {
