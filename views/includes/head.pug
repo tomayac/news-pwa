@@ -41,5 +41,6 @@ head
     }
     document.documentElement.style.setProperty('--main-current-width', `${window.innerWidth - 8}px`);
   script(type='module', src='/js/main.mjs', defer)
+  script(nomodule, src='https://unpkg.com/requirejs@2.3.6/require.js', defer)
   script(nomodule, src='https://unpkg.com/@babel/polyfill@7.2.5/dist/polyfill.js', defer)
   script(nomodule, src='/js/bundle.js', defer)
