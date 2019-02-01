@@ -38,8 +38,8 @@ router.get('/(:newsProvider/)?main.css', (req, res) => {
   if (typeof newsProvider === 'undefined') {
     return res.send(css);
   }
-  const dynamicCss = css.replace(/:root \{/,
-      `:root {${newsProvider.css}`);
+  const dynamicCss = css.replace(/:root\s*\{/,
+      `:root{${newsProvider.css}`);
   return res.send(dynamicCss);
 });
 

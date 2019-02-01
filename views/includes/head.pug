@@ -5,8 +5,8 @@ head
   title= (publisher ? publisher.name : 'News Progressive Web App')
   link(rel='stylesheet', href=`${slug ? `/${slug}` : ''}/main.css`)
   link(rel='preload', href='/fonts/Amstelvar-Roman-VF.woff2', as='font', crossorigin)
-  link(rel='preload', href='/js/lazyload.mjs', as='script', crossorigin)
-  link(rel='preload', href='/js/main.mjs', as='script', crossorigin)
+  link(rel='preload', href='/js/lazyload.js', as='script', crossorigin)
+  link(rel='preload', href='/js/main.js', as='script', crossorigin)
   link(rel='preload', href='/img/placeholder.svg', as='image')
   link(rel='manifest', href=`${slug ? `/${slug}` : ''}/manifest.webmanifest`)
   if publisher
@@ -40,7 +40,5 @@ head
       loadScript('https://unpkg.com/css-vars-ponyfill@1.16.2/dist/css-vars-ponyfill.min.js', window.cssVars)
     }
     document.documentElement.style.setProperty('--main-current-width', `${window.innerWidth - 8}px`);
-  script(type='module', src='/js/main.mjs', defer)
-  script(nomodule, src='https://unpkg.com/requirejs@2.3.6/require.js', defer)
-  script(nomodule, src='https://unpkg.com/@babel/polyfill@7.2.5/dist/polyfill.js', defer)
+  script(type='module', src='/js/main.js', defer)
   script(nomodule, src='/js/bundle.js', defer)

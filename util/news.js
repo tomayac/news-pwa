@@ -15,6 +15,9 @@ const news = {
   contentDistributions: {},
 
   distributeContent: (places, items) => {
+    if (items === 0) {
+      return [];
+    }
     if (places < items) {
       return new Array(places).concat(Array(items).fill(true));
     }

@@ -1,4 +1,4 @@
-import {lazyLoad} from './lazyload.mjs';
+import {lazyLoad} from './lazyload.js';
 
 (() => {
   const main = document.querySelector('main');

@@ -5,8 +5,11 @@
   "main": "app.js",
   "scripts": {
     "start": "node app.js",
-    "lint": "npx eslint './**/*.js' --ignore-pattern '/node_modules/' --ignore-pattern 'bundle.js' --fix && npx eslint public/js/**.mjs && npx stylelint ./public/css/**.css",
-    "build": "npx webpack --mode production public/js/main.mjs -o public/js/bundle.js && npx babel --plugins @babel/plugin-transform-modules-commonjs --presets @babel/preset-env,minify public/js/bundle.js --out-file public/js/bundle.js"
+    "lint": "npx eslint './**/*.js' --ignore-pattern '/node_modules/' --ignore-pattern 'public/js/' --fix && npx eslint src/js/**.js && npx stylelint ./src/css/**.css",
+    "build:js": "npx webpack && babel --presets minify --out-dir public/js src/js/*.js",
+    "build:img": "npx imagemin public/img/*.{webp,png,svg,jpg,jpeg} --out-dir public/img",
+    "build:css": "npx postcss \"src/css/**.css\" --use cssnano --dir public/css",
+    "build": "npm run build:js && npm run build:css npm run build:img"
   },
   "keywords": [
     "news",
@@ -34,11 +37,15 @@
   "devDependencies": {
     "@babel/cli": "^7.2.3",
     "@babel/core": "^7.2.2",
-    "@babel/plugin-transform-modules-commonjs": "^7.2.0",
-    "@babel/preset-env": "^7.2.3",
+    "@babel/preset-env": "^7.3.1",
+    "babel-loader": "^8.0.5",
     "babel-preset-minify": "^0.5.0",
+    "cssnano": "^4.1.8",
     "eslint": "^5.12.0",
     "eslint-config-google": "^0.11.0",
+    "imagemin-cli": "^4.0.0",
+    "postcss-cli": "^6.1.1",
+    "postcss-loader": "^3.0.0",
     "stylelint": "^9.9.0",
     "stylelint-config-standard": "^18.2.0",
     "webpack": "^4.29.0",
@@ -46,7 +53,8 @@
   },
   "eslintConfig": {
     "parserOptions": {
-      "ecmaVersion": 8
+      "ecmaVersion": 8,
+      "sourceType": "module"
     },
     "extends": [
       "google"
